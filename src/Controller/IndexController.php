@@ -16,15 +16,8 @@ use App\Service\ProductService;
 
 class IndexController extends AbstractController
 {
-    // #[Route('/', name: 'index', defaults: ['_format' => 'html'], methods: ['GET'])]
-    // public function index(): Response
-    // {
-    //         return $this->render('index/index.html.twig', [   
-    //     ]);
-    // }
 
     #[Route('/', name: 'product', defaults: ['_format' => 'html'], methods: ['GET','POST'])]
-
     public function productList(ProductService $productService): Response
     {    
         return $this->render('index/index.html.twig', [
