@@ -14,14 +14,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Service\ProductService;
 
+
 class IndexController extends AbstractController
 {
 
-    #[Route('/', name: 'product', defaults: ['_format' => 'html'], methods: ['GET','POST'])]
-    public function productList(ProductService $productService): Response
+    #[Route('/products/{page}', name: 'product', defaults: ['_format' => 'html'], methods: ['GET','POST'])]
+    public function productList(int $page, ProductService $productService): Response
     {    
         return $this->render('index/index.html.twig', [
-            'product' => $productService->getAllProducts(),
+            'paginator' => $productService->getAllProducts($page),
         ]);      
     }
 }

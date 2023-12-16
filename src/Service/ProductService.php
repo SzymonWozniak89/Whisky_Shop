@@ -10,8 +10,8 @@ class ProductService{
 
     }
 
-    public function getAllProducts()
+    public function getAllProducts(int $page)
     {
-        return $this->productRepository->findAll();
+        return $this->productRepository->getPaginated($page);
     }
 }
