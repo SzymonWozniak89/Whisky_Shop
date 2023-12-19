@@ -11,13 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
 {
+    final public const STATUS_CREATED = 'created';
+
+    final public const STATUS_CONFIRMED = 'confirmed';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'cart_id')]
     private ?int $id = null;
-
-    #[ORM\Column(name: 'cart_items', type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $items = null;
 
     #[ORM\Column(name: 'cart_status', length: 50)]
     private ?string $status = null;
@@ -26,7 +27,7 @@ class Cart
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, orphanRemoval: true, cascade:["persist"])]
     private Collection $cartItems;
 
     public function __construct()
@@ -40,16 +41,9 @@ class Cart
     }
 
 
-    public function getItems(): ?array
+    public function getItems(): ?Collection
     {
-        return $this->items;
-    }
-
-    public function setItems(?array $items): static
-    {
-        $this->items = $items;
-
-        return $this;
+        return $this->cartItems;
     }
 
     public function getStatus(): ?string
@@ -64,12 +58,12 @@ class Cart
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(User $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
@@ -97,4 +91,13 @@ class Cart
 
         return $this;
     }
+
+    public function add(Product $product)
+    {
+        $cartItem = new CartItem();
+        $cartItem->setProduct($product);
+        $cartItem->setQuantity(1);
+        $this->addItem($cartItem);
+    }
+
 }

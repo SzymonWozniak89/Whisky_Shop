@@ -18,20 +18,13 @@ class CartItem
     #[ORM\Column(name: 'cartItem_quantity')]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cartItems')]
+    #[ORM\ManyToOne(inversedBy: 'cartItems', cascade:["persist"])]
     #[ORM\JoinColumn(referencedColumnName: 'cart_id', nullable: false)]
     private ?Cart $cart = null;
 
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItems')]
-    private Collection $product;
-
-    #[ORM\ManyToOne(inversedBy: 'orderItems')]
-    private ?Order $orderId = null;
-
-    public function __construct()
-    {
-        $this->id = new ArrayCollection();
-    }
+    #[ORM\OneToOne(targetEntity: Product::class, inversedBy: 'cartItem')]
+    #[ORM\JoinColumn(referencedColumnName: 'product_id', name: 'product_id', nullable: false)]
+    private ?Product $product;
 
     public function getId(): ?int
     {
@@ -62,38 +55,14 @@ class CartItem
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProduct(): Collection
+    public function getProduct(): Product
     {
         return $this->product;
     }
 
-    public function addProduct(Product $productId): static
+    public function setProduct(Product $product): static
     {
-        if (!$this->product->contains($productId)) {
-            $this->product->add($productId);
-        }
-
-        return $this;
-    }
-
-    public function removeProductId(Product $productId): static
-    {
-        $this->product->removeElement($productId);
-
-        return $this;
-    }
-
-    public function getOrderId(): ?Order
-    {
-        return $this->orderId;
-    }
-
-    public function setOrderId(?Order $orderId): static
-    {
-        $this->orderId = $orderId;
+        $this->product = $product;
 
         return $this;
     }

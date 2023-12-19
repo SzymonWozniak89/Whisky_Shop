@@ -3,8 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Cart;
+use App\Entity\CartItem;
+use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @extends ServiceEntityRepository<Cart>
@@ -21,28 +25,32 @@ class CartRepository extends ServiceEntityRepository
         parent::__construct($registry, Cart::class);
     }
 
-//    /**
-//     * @return Cart[] Returns an array of Cart objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findCartByUserId(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->addSelect('c','i')
+            ->leftJoin('c.cartItems', 'i')
+            ->andWhere('c.user = :user')
+            ->andWhere('c.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', Cart::STATUS_CREATED)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
-//    public function findOneBySomeField($value): ?Cart
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function new(User $user): Cart
+    {
+        $cart = new Cart();
+        $cart->setUser($user);
+        $cart->setStatus(Cart::STATUS_CREATED);
+        $this->save($cart);
+        return $cart;
+    }
+
+    public function save(Cart $cart): void {
+        $this->getEntityManager()->persist($cart);
+        $this->getEntityManager()->flush();
+       } 
+       
 }

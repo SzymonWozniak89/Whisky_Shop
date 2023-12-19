@@ -25,11 +25,11 @@ class Product
     #[ORM\Column(name: 'product_description', type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(name: 'product_base_price')]
-    private ?float $basePrice = null;
+    #[ORM\Column(name: 'product_base_price', type: Types::DECIMAL, precision:5, scale:2)]
+    private ?string $basePrice = null;
 
-    #[ORM\Column(name: 'product_price')]
-    private ?float $price = null;
+    #[ORM\Column(name: 'product_price', type: Types::DECIMAL, precision:5, scale:2)]
+    private ?string $price = null;
 
     #[ORM\Column(name: 'product_img', length: 255, nullable: true)]
     private ?string $img = null;
@@ -43,21 +43,16 @@ class Product
     #[ORM\Column(name: 'product_stock')]
     private ?int $stock = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'product', targetEntity: Brand::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
     #[ORM\JoinColumn(referencedColumnName: 'brand_id', nullable: false)]
     private ?Brand $brand = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(referencedColumnName: 'category_id', nullable: false)]
+    //#[ORM\ManyToOne(inversedBy: 'product', cascade: ['persist', 'remove'])]
+    //#[ORM\JoinColumn(referencedColumnName: 'category_id', nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'product')]
-    private Collection $cartItems;
-
-    public function __construct()
-    {
-        $this->cartItems = new ArrayCollection();
-    }
+    #[ORM\OneToOne(targetEntity: CartItem::class, mappedBy: 'product')]
+    private ?CartItem $cartItem;
 
     public function getId(): ?int
     {
@@ -100,24 +95,24 @@ class Product
         return $this;
     }
 
-    public function getBasePrice(): ?float
+    public function getBasePrice(): ?string
     {
         return $this->basePrice;
     }
 
-    public function setBasePrice(float $basePrice): static
+    public function setBasePrice(string $basePrice): static
     {
         $this->basePrice = $basePrice;
 
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): ?string
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): static
+    public function setPrice(string $price): static
     {
         $this->price = $price;
 
@@ -192,33 +187,6 @@ class Product
     public function setCategory(Category $category): static
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CartItem>
-     */
-    public function getCartItems(): Collection
-    {
-        return $this->cartItems;
-    }
-
-    public function addCartItem(CartItem $cartItem): static
-    {
-        if (!$this->cartItems->contains($cartItem)) {
-            $this->cartItems->add($cartItem);
-            $cartItem->addProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCartItem(CartItem $cartItem): static
-    {
-        if ($this->cartItems->removeElement($cartItem)) {
-            $cartItem->removeProductId($this);
-        }
 
         return $this;
     }

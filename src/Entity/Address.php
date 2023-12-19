@@ -37,6 +37,7 @@ class Address
     private ?string $postalCode = null;
 
     #[ORM\ManyToOne(inversedBy: 'addresses')]
+    #[ORM\JoinColumn(name:'user_id', referencedColumnName:'user_id')]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: Order::class)]

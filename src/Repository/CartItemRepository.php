@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\CartItem;
+use App\Entity\Cart;
+use App\Entity\User;
+use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,28 +24,30 @@ class CartItemRepository extends ServiceEntityRepository
         parent::__construct($registry, CartItem::class);
     }
 
-//    /**
-//     * @return CartItem[] Returns an array of CartItem objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findExistCartItem(Product $product, Cart $cart)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.cart = :cart')
+            ->andWhere('i.product = :product')
+            ->setParameter('cart', $cart)
+            ->setParameter('product', $product)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
-//    public function findOneBySomeField($value): ?CartItem
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function get(User $user)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i','c','p')
+            ->leftJoin('i.cart', 'c')
+            ->leftJoin('i.product', 'p')
+            ->andWhere('c.user = :user')
+            ->andWhere('c.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', Cart::STATUS_CREATED)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -31,4 +31,15 @@ class ProductRepository extends ServiceEntityRepository
 
         return (new Paginator($qb))->paginate($page);
     }
+
+    public function get(int $prodId)
+    {
+        return $this->createQueryBuilder('p')
+        ->select('p')
+        ->where('p.id = :id')
+        ->setParameter('id', $prodId)
+        ->getQuery()
+        ->getOneOrNullResult()
+        ;
+    }
 }

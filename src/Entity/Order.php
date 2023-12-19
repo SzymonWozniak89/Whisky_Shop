@@ -20,14 +20,14 @@ class Order
     #[ORM\Column(name: 'order_status', length: 30)]
     private ?string $status = null;
 
-    #[ORM\Column(name: 'order_amount')]
-    private ?float $amount = null;
+    #[ORM\Column(name: 'order_amount',  type: Types::DECIMAL, precision:5, scale:2)]
+    private ?string $amount = null;
 
-    #[ORM\Column(name: 'order_net_amount')]
-    private ?float $netAmount = null;
+    #[ORM\Column(name: 'order_net_amount', type: Types::DECIMAL, precision:5, scale:2)]
+    private ?string $netAmount = null;
 
-    #[ORM\Column(name: 'order_vat_amount')]
-    private ?float $vatAmount = null;
+    #[ORM\Column(name: 'order_vat_amount', type: Types::DECIMAL, precision:5, scale:2)]
+    private ?string $vatAmount = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
@@ -36,14 +36,6 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'address_id', nullable: false)]
     private ?Address $address = null;
-
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: CartItem::class)]
-    private Collection $orderItems;
-
-    public function __construct()
-    {
-        $this->orderItems = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -118,36 +110,6 @@ class Order
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CartItem>
-     */
-    public function getItems(): Collection
-    {
-        return $this->orderItems;
-    }
-
-    public function addItem(CartItem $orderItem): static
-    {
-        if (!$this->orderItems->contains($orderItem)) {
-            $this->orderItems->add($orderItem);
-            $orderItem->setOrderId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeItem(CartItem $orderItem): static
-    {
-        if ($this->orderItems->removeElement($orderItem)) {
-            // set the owning side to null (unless already changed)
-            if ($orderItem->getOrderId() === $this) {
-                $orderItem->setOrderId(null);
-            }
-        }
 
         return $this;
     }

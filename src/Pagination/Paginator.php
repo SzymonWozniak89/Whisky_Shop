@@ -29,7 +29,7 @@ final class Paginator
      *
      * See https://symfony.com/doc/current/best_practices.html#use-constants-to-define-options-that-rarely-change
      */
-    final public const PAGE_SIZE = 1;
+    final public const PAGE_SIZE = 2;
 
     private int $currentPage;
 
