@@ -50,4 +50,11 @@ class CartItemRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function remove(CartItem $cartItem): void
+    {
+         $this->getEntityManager()->remove($cartItem);
+         $this->getEntityManager()->flush();
+  
+    }
 }

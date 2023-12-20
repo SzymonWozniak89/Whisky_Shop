@@ -1,7 +1,7 @@
 <ul class="pagination pagination-md justify-content-center">
     {% if paginator.hasPreviousPage %}
         <li class="page-item">
-            <a class="page-link"
+            <a class="page-link text-black ms-1"
                href="{{ path(app.request.get('_route'), {page: paginator.previousPage}) }}"
                rel="previous">
                 <i class="fa fw fa-long-arrow-left"></i> previous
@@ -16,10 +16,10 @@
     {% for i in 1..paginator.lastPage %}
         {% if i == paginator.currentPage %}
             <li class="page-item active">
-                <span class="page-link">{{ i }} <span class="sr-only">current</span></span>
+                <span class="page-link bg-dark text-white ms-1 border-dark">{{ i }} <span class="sr-only">current</span></span>
             </li>
         {% else %}
-            <li class="page-item"><a class="page-link"
+            <li class="page-item"><a class="page-link text-black ms-1"
                                      href="{{ path(app.request.get('_route'), {page: i}) }}">{{ i }}</a>
             </li>
         {% endif %}
@@ -27,7 +27,7 @@
 
     {% if paginator.hasNextPage %}
         <li class="page-item">
-            <a class="page-link"
+            <a class="page-link text-black ms-1"
                href="{{ path(app.request.get('_route'), {page: paginator.nextPage}) }}">
                 <span>next <i class="fa fw fa-long-arrow-right"></i></span>
             </a>

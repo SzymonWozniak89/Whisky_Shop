@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-
-    
     <!-- Section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
@@ -15,15 +13,21 @@
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Product name-->
-                                {# <h3 class="fw-bolder"> {{ ci.getBrand().getName() }} </h3> #}
-                                <h6 class="fw-bolder"> {{ dump(item) }} </h6>
+                                <h3 class="fw-bolder"> {{ item.getProduct().getBrand().getName() }} </h3>
+                                <h6 class="fw-bolder"> {{ item.getProduct().getName() }} </h6>
                                 <!-- Product price-->
-                                {# <h6> {{ pr.getPrice()|format_currency('PLN', locale='pl') }} </h6> #}
+                                <h6> {{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }} </h6>
+                                <h6> Quantity: {{ item.getQuantity() }} </h6>
                             </div>
                         </div>
                         <!-- Product actions-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            {# <div class="text-center"><a class="btn btn-outline-dark mt-auto" href=" {{ path('cart_add',{'prodId': pr.getId()}) }} ">Add to cart</a></div> #}
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#1">Remove from cart</a></div>
+                            
+                            <form method="post" action="{{ path('cart_remove', {'id': item.getId() }) }}" onsubmit="return confirm('Remove product from cart?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.getId()) }}">
+                            <button class="btn btn-primary">Remove from cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -31,5 +35,4 @@
             </div>
         </div>
     </section>
-
 {% endblock %}
