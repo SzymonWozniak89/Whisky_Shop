@@ -1,38 +1,78 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <!-- Section-->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                {% for item in cartItem %}
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" alt="..." />
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h3 class="fw-bolder"> {{ item.getProduct().getBrand().getName() }} </h3>
-                                <h6 class="fw-bolder"> {{ item.getProduct().getName() }} </h6>
-                                <!-- Product price-->
-                                <h6> {{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }} </h6>
-                                <h6> Quantity: {{ item.getQuantity() }} </h6>
-                            </div>
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            {% if cartItem %}
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-2">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    {% for item in cartItem %}
+                    <tbody class="align-middle bg-white text-black">
+                        <tr>
+                            <td class="align-middle"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
+                                alt="" style="width: 100px;"> {{ item.getProduct().getBrand().getName() }} 
+                                {{ item.getProduct().getName() }}</td>
+                            <td class="align-middle">{{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }}</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-outline-dark mt-auto"> - </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm bg-dark text-center text-white" value=" {{ item.getQuantity() }} ">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-outline-dark mt-auto"> + </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">{{ (item.getProduct().getPrice()*item.getQuantity())|format_currency('PLN', locale='pl') }}</td>
+                            <td class="align-middle">
+                                <form method="post" action="{{ path('cart_remove', {'id': item.getId() }) }}" onsubmit="return confirm('Remove product from cart?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.getId()) }}">
+                                <button class="btn btn-outline-dark mt-auto"> X </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <h3 class="display-9 fw-bolder">Your cart is empty</h3>
+            {% endif %}
+            <div class="col-lg-4">
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-dark border-0">
+                        <h4 class="font-weight-semi-bold m-0 text-white">Cart Summary</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium">{{ subtotalPrice|format_currency('PLN', locale='pl') }}</h6>
                         </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#1">Remove from cart</a></div>
-                            
-                            <form method="post" action="{{ path('cart_remove', {'id': item.getId() }) }}" onsubmit="return confirm('Remove product from cart?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.getId()) }}">
-                            <button class="btn btn-primary">Remove from cart</button>
-                            </form>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium">{{ shippingPrice|format_currency('PLN', locale='pl') }}</h6>
                         </div>
                     </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">{{ totalPrice|format_currency('PLN', locale='pl') }}</h5>
+                        </div>
+                        <a href = "{{ path('checkout_show') }}">
+                            <button class="btn btn-outline-dark mt-auto" href=" {{ path('checkout_show') }}">Proceed To Checkout</button>
+                        </a>
+                    </div>
                 </div>
-                {% endfor %}
             </div>
         </div>
-    </section>
+    </div>
 {% endblock %}

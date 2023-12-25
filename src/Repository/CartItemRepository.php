@@ -40,6 +40,7 @@ class CartItemRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('i')
             ->select('i','c','p')
+            // ->addSelect('(i.quantity)*(p.price) as totalPrice')
             ->leftJoin('i.cart', 'c')
             ->leftJoin('i.product', 'p')
             ->andWhere('c.user = :user')

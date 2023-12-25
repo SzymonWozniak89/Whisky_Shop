@@ -30,10 +30,8 @@ class CartService{
         {
             $cart = $this->cartRepository->new($user);
         }
-        $product = $this->productRepository->get($prodId);
 
-        // @todo zrobić cartItem service -> przerzucić cały burdel dotyczący cartItems do niego
-        // todo zrobić widok koszyka
+        $product = $this->productRepository->get($prodId);
 
         $cartItem = $this->cartItemRepository->findExistCartItem($product, $cart);
 
@@ -51,5 +49,40 @@ class CartService{
     public function remove($cartItem)
     {
        return $this->cartItemRepository->remove($cartItem);
+    }
+
+    public function getNumberOfProductsInCart()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->getNumberOfProductsInCart($user);
+    }
+
+    public function getTotalPrice()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->getTotalPrice($user);
+    }
+
+    public function getCartItems()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartItemRepository->get($user);
+    }
+
+    public function getSubtotalPrice()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->getSubtotalPrice($user);
+    }
+
+    public function getShippingPrice()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->getShippingPrice($user);
     }
 }

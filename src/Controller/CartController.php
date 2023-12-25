@@ -18,6 +18,7 @@ use App\Service\CartItemService;
 use App\Service\CartService;
 use App\Repository\CartItemRepository;
 use App\Entity\User;
+use App\Repository\CartRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,51 +27,40 @@ class CartController extends AbstractController
 {
 
     #[Route('/add/{prodId}', name: 'add', methods: ['GET'])]
-    public function add(int $prodId, CartService $cartService, CartItemRepository $cartItemRepository): Response
+    public function add(int $prodId, CartService $cartService): Response
     {   
-        $cart=$cartService->add($prodId);
-        //dd($cart);
-        /**  @var User $user */
-        $user = $this->getUser(); 
-        //dd($cartItemRepository->get($user));
-        return $this->render('cart/index.html.twig', [
-            'cartItem' => $cartItemRepository->get($user),
-            //'cart' => $cart,
-        ]);      
+        $cartService->add($prodId);
+        $this->addFlash('success', 'Product added'); 
+        return $this->redirectToRoute('product');    
     }
 
     #[Route('/show', name: 'show', methods: ['GET'])]
-    public function cart(CartItemRepository $cartItemRepository): Response
+    public function cart(CartService $cartService): Response
     {
-        /**  @var User $user */
-        $user = $this->getUser();
         return $this->render('cart/index.html.twig', [
-            'cartItem' => $cartItemRepository->get($user),
+            'cartItem' => $cartService->getCartItems(),
+            'totalPrice' => $cartService->getTotalPrice(),
+            'subtotalPrice' => $cartService->getSubtotalPrice(),
+            'shippingPrice' => $cartService->getShippingPrice(),
         ]); 
     }
 
     #[Route('/remove/{id}', name: 'remove', methods: ['GET'])]
-    public function remove(Request $request, CartItem $cartItem, CartService $cartService, CartItemRepository $cartItemRepository): Response
+    public function remove(Request $request, CartItem $cartItem, CartService $cartService): Response
     {   
         if ($this->isCsrfTokenValid('delete'.$cartItem->getId(), $request->request->get('_token'))) {
             $cartService->remove($cartItem);
             $this->addFlash('success', 'Product removed');
         }
-        /**  @var User $user */
-        $user = $this->getUser(); 
-        return $this->render('cart/index.html.twig', [
-            'cartItem' => $cartItemRepository->get($user),
-        ]);      
+        return $this->redirectToRoute('cart_show');       
     }
 
-    // #[Route('/car/delete/{id}', name: 'car_delete', methods: ['POST'])]
-    // public function delete(Request $request, Car $car, CarService $carService): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$car->getCarId(), $request->request->get('_token'))) {
-    //         $carService->deleteCar($car);
-    //         $this->addFlash('success', 'Usunięto samochód!');
-    //     }
+    #[Route('/CartIcon', name: 'CartIcon', methods: ['GET'])]
+    public function CartIcon(CartService $cartService): Response
+    {
+        return $this->render('partials/CartIcon.html.twig', [
+            'numberOfProductsInCart'=>$cartService->getNumberOfProductsInCart()
+        ]); 
+    }
 
-    //     return $this->redirectToRoute('app_car');
-    // }
 }

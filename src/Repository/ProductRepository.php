@@ -25,7 +25,6 @@ class ProductRepository extends ServiceEntityRepository
     public function getPaginated(int $page)
     {
         $qb = $this->createQueryBuilder('p')
-            ->select('p')
             ->where('p.stock > 0')
             ->orderBy('p.id', 'DESC');
 
@@ -35,7 +34,6 @@ class ProductRepository extends ServiceEntityRepository
     public function get(int $prodId)
     {
         return $this->createQueryBuilder('p')
-        ->select('p')
         ->where('p.id = :id')
         ->setParameter('id', $prodId)
         ->getQuery()

@@ -30,7 +30,7 @@ class CartRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->addSelect('c','i')
             ->leftJoin('c.cartItems', 'i')
-            ->andWhere('c.user = :user')
+            ->where('c.user = :user')
             ->andWhere('c.status = :status')
             ->setParameter('user', $user)
             ->setParameter('status', Cart::STATUS_CREATED)
@@ -53,4 +53,58 @@ class CartRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
        } 
        
+
+    public function getNumberOfProductsInCart(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('count(i.product)')
+            ->leftJoin('c.cartItems', 'i')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    public function getTotalPrice(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('sum((i.quantity)*(p.price))')
+            ->leftJoin('c.cartItems', 'i')
+            ->leftJoin('i.product','p')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    public function getSubtotalPrice(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('sum((i.quantity)*(p.price))')
+            ->leftJoin('c.cartItems', 'i')
+            ->leftJoin('i.product','p')
+            ->where('c.user = :user')
+            ->andWhere('p.brand <> 4')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    public function getShippingPrice(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('sum((i.quantity)*(p.price))')
+            ->leftJoin('c.cartItems', 'i')
+            ->leftJoin('i.product','p')
+            ->where('c.user = :user')
+            ->andWhere('p.brand = 4')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
 }
