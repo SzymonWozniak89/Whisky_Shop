@@ -107,4 +107,50 @@ class CartRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getItemQuantity(User $user, int $prodId)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('i.quantity')
+            ->leftJoin('c.cartItems', 'i')
+            ->where('c.user = :user')
+            ->andWhere('i.product = :prodId')
+            ->setParameter('user', $user)
+            ->setParameter('prodId', $prodId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    public function getItemTotalPrice(User $user, int $prodId)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('i.quantity * p.price')
+            ->leftJoin('c.cartItems', 'i')
+            ->leftJoin('i.product', 'p')
+            ->where('c.user = :user')
+            ->andWhere('i.product = :prodId')
+            ->setParameter('user', $user)
+            ->setParameter('prodId', $prodId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    public function subQuantity(User $user, int $prodId)
+    {
+        $query = "update cart_item
+                join cart on cart.cart_id = cart_item.cart_id
+                set cart_item.cartItem_quantity = cart_item.cartItem_quantity - 1
+                where cart_item.product_id = ?
+                and cart.user_id = ?;";
+        $con = $this->getEntityManager()->getConnection();
+        $resultSet = $con->executeQuery($query, [
+            1 => $prodId, 
+            2 => $user->getId(),
+        ]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 }

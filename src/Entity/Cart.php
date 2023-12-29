@@ -23,11 +23,11 @@ class Cart
     #[ORM\Column(name: 'cart_status', length: 50)]
     private ?string $status = null;
 
-    #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist'])]
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, orphanRemoval: true, cascade:["persist"])]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, orphanRemoval: true, cascade:['persist'])]
     private Collection $cartItems;
 
     public function __construct()

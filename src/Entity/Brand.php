@@ -17,7 +17,7 @@ class Brand
     #[ORM\Column(name: 'brand_name', length: 100)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Product::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Product::class, cascade: ['persist'])]
     private Collection $products;
     
 

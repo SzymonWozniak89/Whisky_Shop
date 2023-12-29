@@ -35,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Cart $cart = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, cascade: ['persist', 'remove'])]
     private Collection $addresses;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, orphanRemoval: true)]
@@ -113,11 +113,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->addresses;
     }
 
-    public function addAddress(Address $address): static
+    public function addAddress(Address $address): self
     {
         if (!$this->addresses->contains($address)) {
             $this->addresses->add($address);
-            $address->setUserId($this);
+            $address->setUser($this);
         }
 
         return $this;
@@ -127,8 +127,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->addresses->removeElement($address)) {
             // set the owning side to null (unless already changed)
-            if ($address->getUserId() === $this) {
-                $address->setUserId(null);
+            if ($address->getUser() === $this) {
+                $address->setUser(null);
             }
         }
 

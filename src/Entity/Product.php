@@ -43,11 +43,11 @@ class Product
     #[ORM\Column(name: 'product_stock')]
     private ?int $stock = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product', targetEntity: Brand::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'product', targetEntity: Brand::class, cascade: ['persist'], fetch: 'EAGER')]
     #[ORM\JoinColumn(referencedColumnName: 'brand_id', nullable: false)]
     private ?Brand $brand = null;
 
-    //#[ORM\ManyToOne(inversedBy: 'product', cascade: ['persist', 'remove'])]
+    //#[ORM\ManyToOne(inversedBy: 'product', cascade: ['persist'])]
     //#[ORM\JoinColumn(referencedColumnName: 'category_id', nullable: false)]
     private ?Category $category = null;
 

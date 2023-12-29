@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Address;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,28 +22,26 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
-//    /**
-//     * @return Address[] Returns an array of Address objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findUserAddresses(User $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
-//    public function findOneBySomeField($value): ?Address
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function save(Address $address): void 
+    {
+        $this->getEntityManager()->persist($address);
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Address $address): void
+    {
+         $this->getEntityManager()->remove($address);
+         $this->getEntityManager()->flush();
+  
+    } 
 }

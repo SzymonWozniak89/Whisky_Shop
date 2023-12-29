@@ -36,7 +36,7 @@ class Address
     #[ORM\Column(name: 'address_postal_code', length: 20, nullable: true)]
     private ?string $postalCode = null;
 
-    #[ORM\ManyToOne(inversedBy: 'addresses')]
+    #[ORM\ManyToOne(inversedBy: 'addresses', targetEntity: User::class, cascade: ['persist'], fetch: 'EAGER')]
     #[ORM\JoinColumn(name:'user_id', referencedColumnName:'user_id')]
     private ?User $user = null;
 
@@ -138,12 +138,12 @@ class Address
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 

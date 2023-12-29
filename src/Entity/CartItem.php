@@ -36,7 +36,7 @@ class CartItem
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): static
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -48,7 +48,7 @@ class CartItem
         return $this->cart;
     }
 
-    public function setCart(?Cart $cart): static
+    public function setCart(?Cart $cart): self
     {
         $this->cart = $cart;
 
@@ -60,10 +60,15 @@ class CartItem
         return $this->product;
     }
 
-    public function setProduct(Product $product): static
+    public function setProduct(Product $product): self
     {
         $this->product = $product;
 
         return $this;
+    }
+
+    public function getTotalPrice()
+    {
+        return $this->getProduct()->getPrice()*$this->getQuantity(); 
     }
 }

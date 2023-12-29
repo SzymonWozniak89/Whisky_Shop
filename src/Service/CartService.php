@@ -85,4 +85,26 @@ class CartService{
         $user = $this->security->getUser();
         return $this->cartRepository->getShippingPrice($user);
     }
+
+
+    public function getItemQuantity(int $prodId)
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->getItemQuantity($user, $prodId);
+    }
+
+    public function getItemTotalPrice(int $prodId)
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->getItemTotalPrice($user, $prodId);
+    }
+
+    public function subQuantity(int $prodId)
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->subQuantity($user, $prodId);
+    }
 }

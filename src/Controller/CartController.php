@@ -27,11 +27,25 @@ class CartController extends AbstractController
 {
 
     #[Route('/add/{prodId}', name: 'add', methods: ['GET'])]
-    public function add(int $prodId, CartService $cartService): Response
+    public function add(int $prodId, CartService $cartService, Request $request): Response
     {   
         $cartService->add($prodId);
-        $this->addFlash('success', 'Product added'); 
-        return $this->redirectToRoute('product');    
+
+        if ($request->isXmlHttpRequest()) {  
+            // Ajax request  
+            return new JsonResponse([
+                'quantity' => $cartService->getItemQuantity($prodId), 
+                'price' => $cartService->getItemTotalPrice($prodId),
+                'totalPrice' => $cartService->getTotalPrice(),
+                'subtotalPrice' => $cartService->getSubtotalPrice(),
+                'shippingPrice' => $cartService->getShippingPrice()
+            ]);
+         } else {  
+            // Normal request
+            $this->addFlash('success', 'Product added'); 
+            return $this->redirectToRoute('product');    
+         } 
+
     }
 
     #[Route('/show', name: 'show', methods: ['GET'])]
@@ -63,4 +77,17 @@ class CartController extends AbstractController
         ]); 
     }
 
+    #[Route('/sub/{prodId}', name: 'sub', methods: ['GET'])]
+    public function sub(int $prodId, CartService $cartService, Request $request): JsonResponse
+    {   
+            $cartService->subQuantity($prodId);
+            // Ajax request  
+            return new JsonResponse([
+                'quantity' => $cartService->getItemQuantity($prodId), 
+                'price' => $cartService->getItemTotalPrice($prodId),
+                'totalPrice' => $cartService->getTotalPrice(),
+                'subtotalPrice' => $cartService->getSubtotalPrice(),
+                'shippingPrice' => $cartService->getShippingPrice(),
+            ]);
+    }
 }

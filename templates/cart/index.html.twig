@@ -5,9 +5,9 @@
             {% if cartItem %}
             <div class="col-lg-8 table-responsive mb-5">
                 <table class="table table-bordered text-center mb-2">
-                    <thead class="bg-dark text-white">
+                    <thead class="table-dark">
                         <tr>
-                            <th>Products</th>
+                            <th colspan="2">Products</th>
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
@@ -17,22 +17,22 @@
                     {% for item in cartItem %}
                     <tbody class="align-middle bg-white text-black">
                         <tr>
-                            <td class="align-middle"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
-                                alt="" style="width: 100px;"> {{ item.getProduct().getBrand().getName() }} 
-                                {{ item.getProduct().getName() }}</td>
+                            <td class="align-justify-content-between"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
+                                alt="" style="width: 100px;"></td>
+                            <td>{{ item.getProduct().getBrand().getName() }} {{ item.getProduct().getName() }}</td>
                             <td class="align-middle">{{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }}</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-outline-dark mt-auto"> - </button>
+                                        <button {% if item.getQuantity()==1 %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" class="btn btn-minus btn-outline-dark mt-auto"> - </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-dark text-center text-white" value=" {{ item.getQuantity() }} ">
+                                    <input readonly type="text" class="form-control form-control-sm bg-dark text-center text-white" value=" {{ item.getQuantity() }} ">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-outline-dark mt-auto"> + </button>
+                                        <button data-prod_id="{{ item.getProduct().getId() }}" class="btn btn-plus btn-outline-dark mt-auto"> + </button>
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle">{{ (item.getProduct().getPrice()*item.getQuantity())|format_currency('PLN', locale='pl') }}</td>
+                            <td class="align-middle" id="price_{{ item.getProduct().getId() }}">{{ item.getTotalPrice()|format_currency('PLN', locale='pl') }}</td>
                             <td class="align-middle">
                                 <form method="post" action="{{ path('cart_remove', {'id': item.getId() }) }}" onsubmit="return confirm('Remove product from cart?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.getId()) }}">
@@ -55,17 +55,17 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium">{{ subtotalPrice|format_currency('PLN', locale='pl') }}</h6>
+                            <h6 class="font-weight-medium" id="subtotalPrice">{{ subtotalPrice|format_currency('PLN', locale='pl') }}</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">{{ shippingPrice|format_currency('PLN', locale='pl') }}</h6>
+                            <h6 class="font-weight-medium" id="shippingPrice">{{ shippingPrice|format_currency('PLN', locale='pl') }}</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold">{{ totalPrice|format_currency('PLN', locale='pl') }}</h5>
+                            <h5 class="font-weight-bold" id="totalPrice">{{ totalPrice|format_currency('PLN', locale='pl') }}</h5>
                         </div>
                         <a href = "{{ path('checkout_show') }}">
                             <button class="btn btn-outline-dark mt-auto" href=" {{ path('checkout_show') }}">Proceed To Checkout</button>

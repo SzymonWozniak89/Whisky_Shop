@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <div class="mb-4">
+                    <h4 class="font-weight-semi-bold mb-4">Edit billing Address</h4>
+                    <form class="bg-white rounded-5 shadow-5-strong p-5" method="POST">
+                        {{ form_start(addressEdit) }}
+                            <div class="form-control">
+                                {{ form_label(addressEdit.firstName) }}
+                                {{ form_widget(addressEdit.firstName) }}
+                                <small>{{ form_help(addressEdit.firstName) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.firstName) }}
+                                </div>
+                            </div> 
+                            </br>
+                            <div class="form-control">
+                                {{ form_label(addressEdit.lastName) }}
+                                {{ form_widget(addressEdit.lastName) }}
+                                <small>{{ form_help(addressEdit.lastName) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.lastName) }}
+                                </div>
+                            </div> 
+                            </br>
+                            <div class="form-control">
+                                {{ form_label(addressEdit.line1) }}
+                                {{ form_widget(addressEdit.line1) }}
+                                <small>{{ form_help(addressEdit.line1) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.line1) }}
+                                </div>
+                            </div>
+                            </br>   
+                            <div class="form-control">
+                                {{ form_label(addressEdit.line2) }}
+                                {{ form_widget(addressEdit.line2) }}
+                                <small>{{ form_help(addressEdit.line2) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.line2) }}
+                                </div>
+                            </div>  
+                            </br>                        
+                            <div class="form-control">
+                                {{ form_label(addressEdit.city) }}
+                                {{ form_widget(addressEdit.city) }}
+                                <small>{{ form_help(addressEdit.city) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.city) }}
+                                </div>
+                            </div>                      
+                            </br>                        
+                            <div class="form-control">
+                                {{ form_label(addressEdit.state) }}
+                                {{ form_widget(addressEdit.state) }}
+                                <small>{{ form_help(addressEdit.state) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.state) }}
+                                </div>
+                            </div>  
+                            </br>                        
+                            <div class="form-control">
+                                {{ form_label(addressEdit.postalCode) }}
+                                {{ form_widget(addressEdit.postalCode) }}
+                                <small>{{ form_help(addressEdit.postalCode) }}</small>
+                                <div class="form-error">
+                                    {{ form_errors(addressEdit.postalCode) }}
+                                </div>
+                            </div>                           
+                            </br>
+                            {{ form_row(addressEdit.submit, { 'attr': { 'class' :'btn btn-outline-dark font-weight-bold my-3 py-3'} }) }}
+                            {# {{ form_row(addressEdit.submit, { label: 'Add address' }) }} #}
+                        {{ form_end(addressEdit, {render_rest: false}) }}
+                    </form>              
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+    .form-control{
+        border: 3;
+    }
+    .form-control input{
+        border: 1px solid lightgrey;
+    }
+    </style>
+{% endblock %}
