@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
+{% block title %}Edit address{% endblock %}
 {% block body %}
-    <div class="container-fluid pt-5">
-        <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <div class="mb-4">
-                    <h4 class="font-weight-semi-bold mb-4">Edit billing Address</h4>
-                    <form class="bg-white rounded-5 shadow-5-strong p-5" method="POST">
+    <div id="intro" class="bg-image shadow-2-strong">
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-5 col-md-7">
+                        <div class="mt-4 mb-4 text-center">
+                            <h2 class="font-weight-semi-bold mb-4">Edit shipping Address</h2>
+                        </div>
+                        <form class="bg-light border border-dark mb-5 mt-5 rounded-5 shadow-5-strong p-5" action="{{ path('signUp') }}"
+                              method="post">
                         {{ form_start(addressEdit) }}
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.firstName) }}
                                 {{ form_widget(addressEdit.firstName) }}
                                 <small>{{ form_help(addressEdit.firstName) }}</small>
@@ -16,7 +21,7 @@
                                 </div>
                             </div> 
                             </br>
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.lastName) }}
                                 {{ form_widget(addressEdit.lastName) }}
                                 <small>{{ form_help(addressEdit.lastName) }}</small>
@@ -25,7 +30,7 @@
                                 </div>
                             </div> 
                             </br>
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.line1) }}
                                 {{ form_widget(addressEdit.line1) }}
                                 <small>{{ form_help(addressEdit.line1) }}</small>
@@ -34,7 +39,7 @@
                                 </div>
                             </div>
                             </br>   
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.line2) }}
                                 {{ form_widget(addressEdit.line2) }}
                                 <small>{{ form_help(addressEdit.line2) }}</small>
@@ -43,7 +48,7 @@
                                 </div>
                             </div>  
                             </br>                        
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.city) }}
                                 {{ form_widget(addressEdit.city) }}
                                 <small>{{ form_help(addressEdit.city) }}</small>
@@ -52,7 +57,7 @@
                                 </div>
                             </div>                      
                             </br>                        
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.state) }}
                                 {{ form_widget(addressEdit.state) }}
                                 <small>{{ form_help(addressEdit.state) }}</small>
@@ -61,7 +66,7 @@
                                 </div>
                             </div>  
                             </br>                        
-                            <div class="form-control">
+                            <div class="form-control bg-light border border-0">
                                 {{ form_label(addressEdit.postalCode) }}
                                 {{ form_widget(addressEdit.postalCode) }}
                                 <small>{{ form_help(addressEdit.postalCode) }}</small>

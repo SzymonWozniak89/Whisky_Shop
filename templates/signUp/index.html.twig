@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign up{% endblock %}
+{% block body %}
+    <div id="intro" class="bg-image shadow-2-strong">
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-5 col-md-7">
+                        <div class="mt-4 mb-4 text-center">
+                            <h2 class="font-weight-semi-bold mb-4">Register</h2>
+                        </div>
+                        <form class="bg-light border border-dark mb-5 mt-5 rounded-5 shadow-5-strong p-5" action="{{ path('signUp') }}"
+                              method="post">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            {{ form_start(register) }}
+                                <div class="form-control bg-light border border-0">
+                                    {{ form_label(register.name) }}
+                                    {{ form_widget(register.name) }}
+                                    <small>{{ form_help(register.name) }}</small>
+                                    <div class="form-error">
+                                        {{ form_errors(register.name) }}
+                                    </div>
+                                </div> 
+                                </br>
+                                <div class="form-control bg-light border border-0">
+                                    {{ form_label(register.email) }}
+                                    {{ form_widget(register.email) }}
+                                    <small>{{ form_help(register.email) }}</small>
+                                    <div class="form-error">
+                                        {{ form_errors(register.email) }}
+                                    </div>
+                                </div> 
+                                </br>
+                                <div class="form-control bg-light border border-0">
+                                    {{ form_label(register.password.first) }}
+                                    {{ form_widget(register.password.first) }}
+                                    <small>{{ form_help(register.password.first) }}</small>
+                                    <div class="form-error">
+                                        {{ form_errors(register.password.first) }}
+                                    </div>
+                                </div> 
+                                </br>
+                                <div class="form-control bg-light border border-0">
+                                    {{ form_label(register.password.second) }}
+                                    {{ form_widget(register.password.second) }}
+                                    <small>{{ form_help(register.password.second) }}</small>
+                                    <div class="form-error">
+                                        {{ form_errors(register.password.second) }}
+                                    </div>
+                                </div> 
+                                </br>                          
+                                {{ form_row(register.submit, { 'attr': {'class' :'btn btn-outline-dark font-weight-bold my-3 py-3' } }) }}
+                            {{ form_end(register, {render_rest: true}) }}
+                        </form>
+                    </div>              
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

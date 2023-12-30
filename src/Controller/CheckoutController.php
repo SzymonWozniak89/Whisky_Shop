@@ -31,7 +31,6 @@ class CheckoutController extends AbstractController
     #[Route('/show', name: 'show', methods: ['GET', 'POST'])]
     public function checkout(CartService $cartService, AddressService $addressService): Response
     {
-        //dd($addressService->getUserAddresses());
         return $this->render('checkout/index.html.twig', [
             'addresses' => $addressService->getUserAddresses(),
             'cartItems' => $cartService->getCartItems(),

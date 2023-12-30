@@ -13,6 +13,14 @@ use App\Service\AddressService;
 #[Route('/address', name: 'address_', methods: ['GET','POST'])]
 class AddressController extends AbstractController
 {
+    #[Route('/show', name: 'show', methods: ['GET', 'POST'])]
+    public function address(AddressService $addressService): Response
+    {
+        return $this->render('address/index.html.twig', [
+            'addresses' => $addressService->getUserAddresses(),
+        ]); 
+    }
+
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     public function checkout(AddressService $addressService, Request $request): Response
     {
