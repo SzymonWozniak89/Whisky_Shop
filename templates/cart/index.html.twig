@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% block title %}Cart{% endblock %}
 {% block body %}
     <div class="container-fluid pt-5">
         <div class="row px-xl-5">
@@ -19,16 +20,20 @@
                         <tr>
                             <td class="align-justify-content-between"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
                                 alt="" style="width: 100px;"></td>
-                            <td>{{ item.getProduct().getBrand().getName() }} {{ item.getProduct().getName() }}</td>
+                            <td>{{ item.getProduct().getBrand().getName() }} {{ item.getProduct().getName() }} </td>
                             <td class="align-middle">{{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }}</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button {% if item.getQuantity()==1 %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" class="btn btn-minus btn-outline-dark mt-auto"> - </button>
+                                        <button {% if item.getQuantity()==1 %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" 
+                                            class="btn btn-minus btn-outline-dark mt-auto"> - 
+                                        </button>
                                     </div>
                                     <input readonly type="text" class="form-control form-control-sm bg-dark text-center text-white" value=" {{ item.getQuantity() }} ">
                                     <div class="input-group-btn">
-                                        <button data-prod_id="{{ item.getProduct().getId() }}" class="btn btn-plus btn-outline-dark mt-auto"> + </button>
+                                        <button {% if item.getQuantity()==item.getProduct().getStock() %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" 
+                                            class="btn btn-plus btn-outline-dark mt-auto"> + 
+                                        </button>
                                     </div>
                                 </div>
                             </td>

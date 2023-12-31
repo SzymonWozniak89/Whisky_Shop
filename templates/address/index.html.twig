@@ -31,7 +31,7 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ address.getId()) }}">
                                     <button class="btn btn-outline-dark mt-auto"> Delete </button>
                                 </form>
-                                <a href="#" class="btn btn-outline-dark mt-auto"> Select </a>
+                                <a href="{{ path('address_set', {"id": address.getId() }) }}" class="btn btn-outline-dark mt-auto"> Select </a>
                             </div>
                         </div>
                     </div>

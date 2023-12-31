@@ -12,7 +12,7 @@
                     </a>
                 </div>
                 <div class="row px-sm-6">
-                {% for address in addresses %}
+                {% for address in address %}
                     <div class="col-lg-4 col-md-4 col-sm-6 d-flex align-items-stretch">
                         <div class="card border-secondary mb-5" style="width: 18rem;">
                             <div class="card-header bg-dark text-white border-0">
@@ -26,12 +26,7 @@
                                 <p class="card-text"> {{ address.getState }} </p>
                             </div>
                             <div class="card-footer d-flex justify-content-around">
-                                <a href="{{ path('address_edit', {"id": address.getId() }) }}" class="btn btn-outline-dark mt-auto"> Edit </a>
-                                <form method="post" action="{{ path('address_delete', {'id': address.getId() }) }}" onsubmit="return confirm('Remove address?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ address.getId()) }}">
-                                    <button class="btn btn-outline-dark mt-auto"> Delete </button>
-                                </form>
-                                <a href="#" class="btn btn-outline-dark mt-auto"> Default </a>
+                                Current shipping address
                             </div>
                         </div>
                     </div>

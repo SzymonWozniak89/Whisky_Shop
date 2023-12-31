@@ -40,4 +40,20 @@ class AddressService{
     {
         return $this->addressRepository->delete($address);
     }
+
+    public function setShippingAddress($id)
+    {
+        /** @var User $user */
+        $user=$this->security->getUser();
+        return $this->userRepository->setShippingAddress($id, $user);
+    }
+
+    public function getShippingAddress()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $id = $user->getShippingAddress();
+        //dd($id, $user);
+        return $this->addressRepository->getShippingAddress($id, $user);
+    }
 }

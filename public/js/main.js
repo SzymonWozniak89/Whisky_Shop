@@ -52,6 +52,9 @@
                         if (response.quantity > 1) {
                             button.parent().parent().find('button').first().prop('disabled',false);
                         }
+                        if (response.quantity >= response.productStock) {
+                            button.prop('disabled',true);
+                        }
                     }
                 });
             } else {
@@ -67,6 +70,9 @@
                             $("#subtotalPrice").html(parseFloat(response.subtotalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                             $("#totalPrice").html(parseFloat(response.totalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                             $("#shippingPrice").html(parseFloat(response.shippingPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');    
+                            if (response.quantity < response.productStock) {
+                                button.parent().parent().find('button').prop('disabled',false);
+                            }
                             if (response.quantity == 1) {
                                 button.prop('disabled',true);
                             }

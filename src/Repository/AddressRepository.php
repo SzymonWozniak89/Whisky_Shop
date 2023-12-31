@@ -43,5 +43,17 @@ class AddressRepository extends ServiceEntityRepository
          $this->getEntityManager()->remove($address);
          $this->getEntityManager()->flush();
   
-    } 
+    }
+    
+    public function getShippingAddress(int $id, User $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.user = :user')
+            ->andWhere('a.id = :id')
+            ->setParameter('user', $user)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

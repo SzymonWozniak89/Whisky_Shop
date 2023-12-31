@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Address;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,9 +22,15 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function saveUser(User $user): void {
+    public function saveUser(User $user): void 
+    {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
-       } 
+    }
 
+    public function setShippingAddress(int $id, User $user): void
+    {
+        $user->setShippingAddress($id);
+        $this->saveUser($user);
+    }
 }

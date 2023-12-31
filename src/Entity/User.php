@@ -41,6 +41,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
+    #[ORM\Column(name: 'user_shipping_address', nullable: true)]
+    private ?int $shippingAddress = null;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -224,6 +227,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles($roles)
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getShippingAddress(): ?int
+    {
+        return $this->shippingAddress;
+    }
+
+    public function setShippingAddress(?int $shippingAddress): static
+    {
+        $this->shippingAddress = $shippingAddress;
 
         return $this;
     }

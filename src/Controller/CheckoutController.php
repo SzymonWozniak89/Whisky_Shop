@@ -32,7 +32,7 @@ class CheckoutController extends AbstractController
     public function checkout(CartService $cartService, AddressService $addressService): Response
     {
         return $this->render('checkout/index.html.twig', [
-            'addresses' => $addressService->getUserAddresses(),
+            'address' => $addressService->getShippingAddress(),
             'cartItems' => $cartService->getCartItems(),
             'totalPrice' => $cartService->getTotalPrice(),
             'subtotalPrice' => $cartService->getSubtotalPrice(),

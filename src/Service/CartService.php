@@ -107,4 +107,9 @@ class CartService{
         $user = $this->security->getUser();
         return $this->cartRepository->subQuantity($user, $prodId);
     }
+
+    public function getProductStock($prodId)
+    {
+        return $this->productRepository->get($prodId)->getStock();
+    }
 }

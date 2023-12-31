@@ -22,7 +22,7 @@ class AddressController extends AbstractController
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
-    public function checkout(AddressService $addressService, Request $request): Response
+    public function addAddress(AddressService $addressService, Request $request): Response
     {
         $address = new Address;
         $form = $this->createForm(AddressType::class, $address);
@@ -51,7 +51,7 @@ class AddressController extends AbstractController
 
              $this->addFlash('success', 'Address updated');
              
-             return $this->redirectToRoute('checkout_show');
+             return $this->redirectToRoute('address_show');
          }
 
          return $this->render('address/edit.html.twig', [
@@ -68,6 +68,13 @@ class AddressController extends AbstractController
          }
 
          return $this->redirectToRoute('checkout_show');
+     }
+
+     #[Route('/set/{id}', name: 'set', methods: ['POST','GET'])]
+     public function setAddress(int $id, AddressService $addressService): Response
+     {                 
+              $addressService->setShippingAddress($id);              
+              return $this->redirectToRoute('checkout_show');
      }
 
 }
