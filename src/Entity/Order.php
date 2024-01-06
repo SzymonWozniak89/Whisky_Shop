@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`Order`')]
 class Order
 {
+    public const STATUS_NEW = 'new';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELED = 'canceled';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'order_id')]
@@ -36,6 +42,9 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'address_id', nullable: false)]
     private ?Address $address = null;
+
+    #[ORM\Column(length: 50, type: Types::DECIMAL, precision:5, scale:2)]
+    private ?string $shipmentPrice = null;
 
     public function getId(): ?int
     {
@@ -110,6 +119,18 @@ class Order
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getShipmentPrice(): ?string
+    {
+        return $this->shipmentPrice;
+    }
+
+    public function setShipmentPrice(string $shipmentPrice): static
+    {
+        $this->shipmentPrice = $shipmentPrice;
 
         return $this;
     }

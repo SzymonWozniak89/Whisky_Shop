@@ -30,6 +30,10 @@ class Cart
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, orphanRemoval: true, cascade:['persist'])]
     private Collection $cartItems;
 
+    #[ORM\ManyToOne(inversedBy: 'carts', targetEntity: Shipment::class, cascade: ['persist'], fetch: 'EAGER')]
+    #[ORM\JoinColumn(referencedColumnName: 'shipment_id', nullable: true)]
+    private ?shipment $shipment = null;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
@@ -98,6 +102,18 @@ class Cart
         $cartItem->setProduct($product);
         $cartItem->setQuantity(1);
         $this->addItem($cartItem);
+    }
+
+    public function getShipment(): ?shipment
+    {
+        return $this->shipment;
+    }
+
+    public function setShipment(?shipment $shipment): static
+    {
+        $this->shipment = $shipment;
+
+        return $this;
     }
 
 }

@@ -24,7 +24,7 @@ security:
                 default_target_path: product
             logout:
                 path: logout
-                target: login
+                target: product
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

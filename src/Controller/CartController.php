@@ -3,58 +3,36 @@
 namespace App\Controller;
 
 use App\Entity\CartItem;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Entity\Shipment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\Cache;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use App\Service\ProductService;
-use App\Service\CartItemService;
 use App\Service\CartService;
-use App\Repository\CartItemRepository;
-use App\Entity\User;
-use App\Repository\CartRepository;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Service\CartCalculatorService;
+use App\Service\ShipmentService;
 use Symfony\Component\HttpFoundation\Request;
-
-use function PHPUnit\Framework\returnSelf;
-use function PHPUnit\Framework\returnValue;
 
 #[Route('/cart', name: 'cart_', methods: ['GET','POST'])]
 class CartController extends AbstractController
 {
 
     #[Route('/add/{prodId}', name: 'add', methods: ['GET'])]
-    public function add(int $prodId, CartService $cartService, Request $request): Response
+    public function add(int $prodId, CartService $cartService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService, Request $request): Response
     {   
         if ($request->isXmlHttpRequest()) {  
             if ($cartService->getItemQuantity($prodId) < $cartService->getProductStock($prodId)){
                 $cartService->add($prodId);
-                 
-                return new JsonResponse([
-                    'quantity' => $cartService->getItemQuantity($prodId), 
-                    'price' => $cartService->getItemTotalPrice($prodId),
-                    'totalPrice' => $cartService->getTotalPrice(),
-                    'subtotalPrice' => $cartService->getSubtotalPrice(),
-                    'shippingPrice' => $cartService->getShippingPrice(),
-                    'productStock' => $cartService->getProductStock($prodId)
-                ]);
-            } else {
-                return new JsonResponse([
-                    'quantity' => $cartService->getItemQuantity($prodId), 
-                    'price' => $cartService->getItemTotalPrice($prodId),
-                    'totalPrice' => $cartService->getTotalPrice(),
-                    'subtotalPrice' => $cartService->getSubtotalPrice(),
-                    'shippingPrice' => $cartService->getShippingPrice(),
-                    'productStock' => $cartService->getProductStock($prodId)
-                ]);
-            }
-             
+            } 
+            return new JsonResponse([
+                'quantity' => $cartService->getItemQuantity($prodId), 
+                'price' => $cartService->getItemTotalPrice($prodId),
+                'totalPrice' => $cartCalculatorService->getCartTotalPrice(),
+                'subtotalPrice' => $cartService->getSubtotalPrice(),
+                'cheapestShipping' => $shipmentService->getCheapestShipping(),
+                'productStock' => $cartService->getProductStock($prodId)
+            ]);
+
         } else {
             $cartService->add($prodId);  
             $this->addFlash('success', 'Product added'); 
@@ -64,13 +42,13 @@ class CartController extends AbstractController
     }
 
     #[Route('/show', name: 'show', methods: ['GET'])]
-    public function cart(CartService $cartService): Response
+    public function cart(CartService $cartService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService): Response
     {
         return $this->render('cart/index.html.twig', [
             'cartItem' => $cartService->getCartItems(),
-            'totalPrice' => $cartService->getTotalPrice(),
+            'totalPrice' => $cartCalculatorService->getCartTotalPrice(),
             'subtotalPrice' => $cartService->getSubtotalPrice(),
-            'shippingPrice' => $cartService->getShippingPrice(),
+            'cheapestShipping' => $shipmentService->getCheapestShipping(),
         ]); 
     }
 
@@ -93,7 +71,7 @@ class CartController extends AbstractController
     }
 
     #[Route('/sub/{prodId}', name: 'sub', methods: ['GET'])]
-    public function sub(int $prodId, CartService $cartService, Request $request): JsonResponse
+    public function sub(int $prodId, CartService $cartService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService): JsonResponse
     {   
         if ($cartService->getItemQuantity($prodId) > 1){ 
             $cartService->subQuantity($prodId);
@@ -101,10 +79,11 @@ class CartController extends AbstractController
         return new JsonResponse([
             'quantity' => $cartService->getItemQuantity($prodId), 
             'price' => $cartService->getItemTotalPrice($prodId),
-            'totalPrice' => $cartService->getTotalPrice(),
+            'totalPrice' => $cartCalculatorService->getCartTotalPrice(),
             'subtotalPrice' => $cartService->getSubtotalPrice(),
             'shippingPrice' => $cartService->getShippingPrice(),
-            'productStock' => $cartService->getProductStock($prodId)
+            'productStock' => $cartService->getProductStock($prodId),
+            'cheapestShipping' => $shipmentService->getCheapestShipping(),
         ]);
     }
 }

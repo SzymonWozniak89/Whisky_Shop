@@ -58,13 +58,6 @@ class CartService{
         return $this->cartRepository->getNumberOfProductsInCart($user);
     }
 
-    public function getTotalPrice()
-    {
-        /** @var User $user */
-        $user = $this->security->getUser();
-        return $this->cartRepository->getTotalPrice($user);
-    }
-
     public function getCartItems()
     {
         /** @var User $user */
@@ -111,5 +104,12 @@ class CartService{
     public function getProductStock($prodId)
     {
         return $this->productRepository->get($prodId)->getStock();
+    }
+
+    public function findUserCart()
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        return $this->cartRepository->findOneBy(['user' => $user]);
     }
 }

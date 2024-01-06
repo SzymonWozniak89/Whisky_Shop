@@ -75,19 +75,10 @@
                             </div>                           
                             </br>
                             {{ form_row(addressAdd.submit, { 'attr': {'class' :'btn btn-outline-dark font-weight-bold my-3 py-3' } }) }}
-                            {# {{ form_row(addressAdd.submit, { label: 'Add address' }) }} #}
                         {{ form_end(addressAdd, {render_rest: false}) }}
                     </form>              
                 </div>
             </div>
         </div>
     </div>
-    <style>
-    .form-control{
-        border: 3;
-    }
-    .form-control input{
-        border: 1px solid lightgrey;
-    }
-    </style>
 {% endblock %}

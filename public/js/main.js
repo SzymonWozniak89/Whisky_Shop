@@ -48,7 +48,7 @@
                         $("#price_"+button.data('prod_id')).html(parseFloat(response.price).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                         $("#subtotalPrice").html(parseFloat(response.subtotalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                         $("#totalPrice").html(parseFloat(response.totalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
-                        $("#shippingPrice").html(parseFloat(response.shippingPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
+                        $("#shippingPrice").html(parseFloat(response.cheapestShipping).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                         if (response.quantity > 1) {
                             button.parent().parent().find('button').first().prop('disabled',false);
                         }
@@ -69,7 +69,7 @@
                             $("#price_"+button.data('prod_id')).html(parseFloat(response.price).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                             $("#subtotalPrice").html(parseFloat(response.subtotalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
                             $("#totalPrice").html(parseFloat(response.totalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
-                            $("#shippingPrice").html(parseFloat(response.shippingPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');    
+                            $("#shippingPrice").html(parseFloat(response.cheapestShipping).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');    
                             if (response.quantity < response.productStock) {
                                 button.parent().parent().find('button').prop('disabled',false);
                             }
@@ -85,5 +85,22 @@
             }
         });
     });
+
+    $(document).ready(function () {
+        $('.shipment-list').find('input[type=radio]').click(function(event) {
+            console.log(event.target.id)
+            $.ajax({
+                url: '/checkout/shipping/' + event.target.id,
+                type: 'get',
+                data: {},
+                success: function(response){ 
+                    $("#shippingPrice").html(parseFloat(response.shippingPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
+                    $("#totalPrice").html(parseFloat(response.totalPrice).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").toString().replace('.',',') + ' zł');
+                }
+            });
+        });
+    });
+
+
 })(jQuery);
 

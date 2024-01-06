@@ -16,6 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Service\ProductService;
 use App\Service\CartItemService;
+use App\Service\CartCalculatorService;
 use App\Service\CartService;
 use App\Repository\CartItemRepository;
 use App\Entity\User;
@@ -24,20 +25,35 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\Type\AddressType;
 use App\Service\AddressService;
+use App\Service\ShipmentService;
+
 
 #[Route('/checkout', name: 'checkout_', methods: ['GET','POST'])]
 class CheckoutController extends AbstractController
 {
     #[Route('/show', name: 'show', methods: ['GET', 'POST'])]
-    public function checkout(CartService $cartService, AddressService $addressService): Response
+    public function checkout(CartService $cartService, AddressService $addressService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService): Response
     {
         return $this->render('checkout/index.html.twig', [
+            'cart' => $cartService->findUserCart(),
             'address' => $addressService->getShippingAddress(),
             'cartItems' => $cartService->getCartItems(),
-            'totalPrice' => $cartService->getTotalPrice(),
+            'shipping' => $shipmentService->getShipping(),
+            'totalPrice' => $cartCalculatorService->getOrderTotalPrice(),
             'subtotalPrice' => $cartService->getSubtotalPrice(),
             'shippingPrice' => $cartService->getShippingPrice(),
         ]); 
+    }
+
+    #[Route('/shipping/{id}', name: 'shipping', methods: ['GET', 'POST'])]
+    public function setShippingMethod(int $id, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService): JsonResponse
+    {
+        $shipmentService->add($id);  
+
+        return new JsonResponse([
+            'shippingPrice' => $shipmentService->getById($id)->getPrice(),
+            'totalPrice' => $cartCalculatorService->getOrderTotalPrice(),
+        ]);
     }
 
 }

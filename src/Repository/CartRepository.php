@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\Product;
+use App\Entity\Shipment;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -66,12 +67,13 @@ class CartRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getTotalPrice(User $user)
+    public function getOrderTotalPrice(User $user)
     {
         return $this->createQueryBuilder('c')
-            ->select('sum((i.quantity)*(p.price))')
+            ->select('sum((i.quantity)*(p.price)) + coalesce(s.price, 0)')
             ->leftJoin('c.cartItems', 'i')
             ->leftJoin('i.product','p')
+            ->leftJoin('c.shipment','s')
             ->where('c.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
@@ -86,7 +88,6 @@ class CartRepository extends ServiceEntityRepository
             ->leftJoin('c.cartItems', 'i')
             ->leftJoin('i.product','p')
             ->where('c.user = :user')
-            ->andWhere('p.brand <> 4')
             ->setParameter('user', $user)
             ->getQuery()
             ->getSingleScalarResult()
@@ -96,11 +97,9 @@ class CartRepository extends ServiceEntityRepository
     public function getShippingPrice(User $user)
     {
         return $this->createQueryBuilder('c')
-            ->select('sum((i.quantity)*(p.price))')
-            ->leftJoin('c.cartItems', 'i')
-            ->leftJoin('i.product','p')
+            ->select('s.price')
+            ->leftJoin('c.shipment','s')
             ->where('c.user = :user')
-            ->andWhere('p.brand = 4')
             ->setParameter('user', $user)
             ->getQuery()
             ->getSingleScalarResult()
@@ -152,5 +151,10 @@ class CartRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function setShippingMethod(Shipment $shipment, Cart $cart): void
+    {
+        $cart->setShipment($shipment);
+        $this->save($cart);
+    }
 
 }

@@ -45,13 +45,13 @@ class AddressRepository extends ServiceEntityRepository
   
     }
     
-    public function getShippingAddress(int $id, User $user)
+    public function getShippingAddress(User $user)
     {
         return $this->createQueryBuilder('a')
             ->where('a.user = :user')
             ->andWhere('a.id = :id')
             ->setParameter('user', $user)
-            ->setParameter('id', $id)
+            ->setParameter('id', $user->getShippingAddress())
             ->getQuery()
             ->getResult()
         ;

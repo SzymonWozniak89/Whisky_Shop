@@ -74,7 +74,7 @@
         </div>
     </nav>
     <!-- Header-->
-    <header class="bg-dark py-5">
+    <header class="bg-dark py-1">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">Whisky Shop</h1>
@@ -83,6 +83,14 @@
         </div>
     </header>
         {% block body %}{% endblock %}
+    <style>
+    .form-control{
+        border: 3;
+    }
+    .form-control input{
+        border: 1px solid lightgrey;
+    }
+    </style>
     <!-- Footer-->
     <footer class="py-5 bg-dark">
         <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Szymon Woźniak 2023</p></div>

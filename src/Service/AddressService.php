@@ -8,27 +8,26 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class AddressService{
+
+    private User $user;
+    
     public function __construct(
         public readonly AddressRepository $addressRepository,
         public readonly UserRepository $userRepository,
         private readonly Security $security,
         ){
-
+            $this->user = $security->getUser();
     }
 
     public function addNewAddress(Address $address) 
     {
-        /** @var User $user */
-        $user=$this->security->getUser();
-        $address->setUser($user);
+        $address->setUser($this->user);
         return $this->addressRepository->save($address);
     }
 
     public function getUserAddresses()
     {
-        /** @var User $user */
-        $user=$this->security->getUser();
-        return $this->addressRepository->findUserAddresses($user);
+        return $this->addressRepository->findUserAddresses($this->user);
     }
 
     public function edit($address)
@@ -43,17 +42,11 @@ class AddressService{
 
     public function setShippingAddress($id)
     {
-        /** @var User $user */
-        $user=$this->security->getUser();
-        return $this->userRepository->setShippingAddress($id, $user);
+        return $this->userRepository->setShippingAddress($id, $this->user);
     }
 
     public function getShippingAddress()
     {
-        /** @var User $user */
-        $user = $this->security->getUser();
-        $id = $user->getShippingAddress();
-        //dd($id, $user);
-        return $this->addressRepository->getShippingAddress($id, $user);
+        return $this->addressRepository->getShippingAddress($this->user);
     }
 }
