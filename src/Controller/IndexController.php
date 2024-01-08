@@ -2,21 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\Cache;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Service\ProductService;
 
 
 class IndexController extends AbstractController
 {
+    #[Route('/', name: 'index', methods: ['GET'])]
+    public function index(): Response
+    {
+        return $this->redirectToRoute('product');
+    }
+
 
     #[Route('/products/{page?1}', name: 'product', defaults: ['_format' => 'html'], methods: ['GET'])]
     public function productList(int $page, ProductService $productService): Response
@@ -25,5 +24,4 @@ class IndexController extends AbstractController
             'paginator' => $productService->getAllProducts($page),
         ]);
     }
-
 }
