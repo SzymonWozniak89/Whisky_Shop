@@ -18,6 +18,7 @@ use App\Service\ProductService;
 use App\Service\CartItemService;
 use App\Service\CartCalculatorService;
 use App\Service\CartService;
+use App\Service\PaymentService;
 use App\Repository\CartItemRepository;
 use App\Entity\User;
 use App\Repository\CartRepository;
@@ -32,13 +33,14 @@ use App\Service\ShipmentService;
 class CheckoutController extends AbstractController
 {
     #[Route('/show', name: 'show', methods: ['GET', 'POST'])]
-    public function checkout(CartService $cartService, AddressService $addressService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService): Response
+    public function checkout(CartService $cartService, AddressService $addressService, PaymentService $paymentService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService): Response
     {
         return $this->render('checkout/index.html.twig', [
             'cart' => $cartService->findUserCart(),
             'address' => $addressService->getShippingAddress(),
             'cartItems' => $cartService->getCartItems(),
             'shipping' => $shipmentService->getShipping(),
+            'payment' => $paymentService->getPayment(),
             'totalPrice' => $cartCalculatorService->getOrderTotalPrice(),
             'subtotalPrice' => $cartService->getSubtotalPrice(),
             'shippingPrice' => $cartService->getShippingPrice(),

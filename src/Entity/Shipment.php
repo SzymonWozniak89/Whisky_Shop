@@ -22,7 +22,7 @@ class Shipment
     #[ORM\Column (name: 'shipment_price', type: Types::DECIMAL, precision:5, scale:2)]
     private ?string $price = null;
 
-    #[ORM\OneToMany(mappedBy: 'shipment', targetEntity: Cart::class, orphanRemoval: true, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'shipment', targetEntity: Cart::class, cascade:['persist'])]
     private Collection $carts;
 
     public function __construct()

@@ -26,6 +26,10 @@ class CartItem
     #[ORM\JoinColumn(referencedColumnName: 'product_id', name: 'product_id', nullable: false)]
     private ?Product $product;
 
+    #[ORM\ManyToOne(inversedBy: 'cartItems', cascade:["persist"])]
+    #[ORM\JoinColumn(referencedColumnName: 'order_id', nullable: true)]
+    private ?Order $orderRef = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,5 +74,17 @@ class CartItem
     public function getTotalPrice()
     {
         return $this->getProduct()->getPrice()*$this->getQuantity(); 
+    }
+
+    public function getOrderRef(): ?order
+    {
+        return $this->orderRef;
+    }
+
+    public function setOrderRef(?order $orderRef): static
+    {
+        $this->orderRef = $orderRef;
+
+        return $this;
     }
 }

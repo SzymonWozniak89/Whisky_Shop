@@ -73,7 +73,7 @@
                         <div class="form-group">
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" name="Shipping" id="{{ shipping.getId() }}" {% if cart.getShipment().getId() == shipping.getId() %} checked {% endif %}>
-                                <label class="custom-control-label" for="paypal"> {{ shipping.getName() }} </label>
+                                <label class="custom-control-label" for="name"> {{ shipping.getName() }} </label>
                             </div>
                         </div>
                         {% endfor %}
@@ -83,31 +83,19 @@
                     <div class="card-header bg-dark text-white border-0">
                         <h4 class="font-weight-semi-bold m-0">Payment</h4>
                     </div>
-                    <div class="card-body">
-                        <form action="{{ path('order_created') }}">
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                    <label class="custom-control-label" for="paypal">Paypal</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                                    <label class="custom-control-label" for="directcheck">PayU</label>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                                    <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                                </div>
+                    <div class="card-body shipment-list">
+                        {% for payment in payment %}
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="Payment" id="{{ payment.getId() }}">
+                                <label class="custom-control-label" for="name"> {{ payment.getName() }} </label>
                             </div>
                         </div>
-                        <div class="card-footer border-secondary bg-transparent">
-                            <button class="btn btn-outline-dark font-weight-bold my-3 py-3" type="submit">Place Order</button>
-                        </div>
-                    </form>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <button class="btn btn-outline-dark font-weight-bold my-3 py-3" type="submit">Place Order</button>
+                    </div>
                 </div>
             </div>
         </div>

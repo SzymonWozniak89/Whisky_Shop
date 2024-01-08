@@ -44,7 +44,6 @@ class Cart
         return $this->id;
     }
 
-
     public function getItems(): ?Collection
     {
         return $this->cartItems;
