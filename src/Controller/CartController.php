@@ -33,11 +33,8 @@ class CartController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             
             if ($cartService->getProductStock($prodId) > 0){
-                var_dump($cartService->getProductStock($prodId));
                 $cartService->add($prodId);
-                var_dump($cartService->getProductStock($prodId));die;
             }
-            die;
             return new JsonResponse([
                 'quantity' => $cartService->getItemQuantity($prodId),
                 'price' => $cartService->getItemTotalPrice($prodId),

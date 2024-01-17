@@ -29,14 +29,14 @@ class StockService{
         if (0 === $product->getStock()) {
             throw new \App\Exception\ProductStockDepletedException();
         }
-        $product->setStock($product->getStock()-$qty);
+        $product->setStock($product->getStock() - $qty);
         $this->productRepository->save($product);
-        // return $this->productRepository->decreaseQty($product, $qty);
     }
 
     public function increase(Product $product, int $qty)
     {
-        return $this->productRepository->increaseQty($product, $qty);
+        $product->setStock($product->getStock() + $qty);
+        $this->productRepository->save($product);
     }
 
 

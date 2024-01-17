@@ -31,7 +31,7 @@
                                     </div>
                                     <input readonly type="text" class="form-control form-control-sm bg-dark text-center text-white" value=" {{ item.getQuantity() }} ">
                                     <div class="input-group-btn">
-                                        <button {% if item.getQuantity()==item.getProduct().getStock() %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" 
+                                        <button {% if item.getProduct().getStock() < 1 %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" 
                                             class="btn btn-plus btn-outline-dark mt-auto"> + 
                                         </button>
                                     </div>

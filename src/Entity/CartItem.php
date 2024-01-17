@@ -22,13 +22,13 @@ class CartItem
     #[ORM\JoinColumn(referencedColumnName: 'cart_id', nullable: true)]
     private ?Cart $cart = null;
 
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItem', cascade:["persist"])]
-    #[ORM\JoinColumn(referencedColumnName: 'product_id', name: 'product_id', nullable: false)]
-    private ?Product $product;
-
     #[ORM\ManyToOne(inversedBy: 'cartItems', cascade:["persist"])]
     #[ORM\JoinColumn(referencedColumnName: 'order_id', nullable: true)]
     private ?Order $orderRef = null;
+
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItem', cascade:["persist"])]
+    #[ORM\JoinColumn(referencedColumnName: 'product_id', nullable: false)]
+    private ?Product $product = null;
 
     public function getId(): ?int
     {
@@ -59,18 +59,6 @@ class CartItem
         return $this;
     }
 
-    public function getProduct(): Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
     public function getTotalPrice()
     {
         return $this->getProduct()->getPrice()*$this->getQuantity(); 
@@ -84,6 +72,18 @@ class CartItem
     public function setOrderRef(?order $orderRef): static
     {
         $this->orderRef = $orderRef;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }
