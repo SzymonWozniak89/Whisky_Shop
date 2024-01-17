@@ -49,9 +49,6 @@
                     </tbody>
                 </table>
             </div>
-            {% else %}
-                <h3 class="display-9 fw-bolder">Your cart is empty</h3>
-            {% endif %}
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
                     <div class="card-header bg-dark border-0">
@@ -78,6 +75,14 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="row px-xl-5 text-center">
+                <h2 class="display-9 fw-bolder mb-4">Your cart is empty!</h2>
+                <a href = "{{ path('product') }}">
+                    <button class="btn btn-outline-dark mb-5" href=" {{ path('product') }}">Go to Main Page</button>
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

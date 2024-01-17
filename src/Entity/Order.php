@@ -37,7 +37,7 @@ class Order
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'address_id', nullable: false)]
@@ -56,6 +56,7 @@ class Order
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
+        $this->user = new User;
     }
 
     public function getId(): ?int

@@ -40,4 +40,29 @@ class ProductRepository extends ServiceEntityRepository
         ->getOneOrNullResult()
         ;
     }
+
+    public function decreaseQty(Product $product, int $qty)
+    {
+        return $this
+            ->createQueryBuilder('p')
+            ->update()
+            ->set('p.stock', $product->getStock() - $qty)
+            ->where('p.id = :id')
+            ->setParameter('id', $product->getId())
+            ->getQuery()
+            ->execute();
+    }
+
+    public function increaseQty(Product $product, int $qty)
+    {
+        return $this
+            ->createQueryBuilder('p')
+            ->update()
+            ->set('p.stock', $product->getStock() + $qty)
+            ->where('p.id = :id')
+            ->setParameter('id', $product->getId())
+            ->getQuery()
+            ->execute();
+    }
+
 }

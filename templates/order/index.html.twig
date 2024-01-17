@@ -1,113 +1,64 @@
 {% extends 'base.html.twig' %}
-{% block title %}Checkout{% endblock %}
+{% block title %}Order Summary{% endblock %}
 {% block body %}
     <div class="container-fluid pt-5">
+        <div class="row px-xl-5 text-center mb-5">
+            <h2>Your order has been successfully placed.</h2>
+            <h2>Thank you for shopping!</h2>
+        </div>
         <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <div class="mb-4">
-                    <h4 class="font-weight-semi-bold mb-4">Shipping Address</h4>
-                </div>
-                <div class="mb-4">
-                    <a href = "{{ path('address_show') }}">
-                        <button class="btn btn-outline-dark mt-auto my-3 py-3" href=" {{ path('address_show') }}"> Change shipping address </button>
-                    </a>
-                </div>
-                <div class="row px-sm-6">
-                {% for address in address %}
-                    <div class="col-lg-4 col-md-4 col-sm-6 d-flex align-items-stretch">
-                        <div class="card border-secondary mb-5" style="width: 18rem;">
-                            <div class="card-header bg-dark text-white border-0">
-                                <h4 class="font-weight-semi-bold m-0"> {{ address.getFirstName }} {{ address.getLastName }} </h4>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text"> {{ address.getFirstName }} {{ address.getLastName }} </p>
-                                <p class="card-text"> {{ address.getLine1 }} </p>
-                                <p class="card-text"> {{ address.getLine2 }} </p>
-                                <p class="card-text"> {{ address.getPostalCode }} {{ address.getCity }} </p>
-                                <p class="card-text"> {{ address.getState }} </p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-around">
-                                Current shipping address
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-            </div>       
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-2">
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="2">Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    {% for item in orderItem %}
+                    <tbody class="align-middle bg-white text-black">
+                        <tr>
+                            <td class="align-justify-content-between"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
+                                alt="" style="width: 100px;"></td>
+                            <td>{{ item.getProduct().getBrand().getName() }} {{ item.getProduct().getName() }} </td>
+                            <td class="align-middle">{{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }}</td>
+                            <td class="align-middle">{{ item.getQuantity() }}</td>
+                            <td class="align-middle">{{ item.getTotalPrice()|format_currency('PLN', locale='pl') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
-                    <div class="card-header bg-dark text-white border-0">
-                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                    <div class="card-header bg-dark border-0">
+                        <h4 class="font-weight-semi-bold m-0 text-white">Order Summary</h4>
                     </div>
                     <div class="card-body">
-                        <h5 class="font-weight-medium mb-3">Products</h5>
-                        {% for item in cartItems %}
-                        <div class="d-flex justify-content-between">
-                            <p>{{ item.getQuantity() }} x {{ item.getProduct().getBrand().getName() }} {{ item.getProduct().getName() }}</p>
-                            <p>{{ item.getTotalPrice()|format_currency('PLN', locale='pl') }}</p>
-                        </div>
-                        {% endfor %}
-                        <hr class="mt-0">
                         <div class="d-flex justify-content-between mb-3 pt-1">
-                            <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium">{{ subtotalPrice|format_currency('PLN', locale='pl') }}</h6>
+                            <h6 class="font-weight-medium">Netto amount</h6>
+                            <h6 class="font-weight-medium">{{ netAmount|format_currency('PLN', locale='pl') }}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">VAT amount</h6>
+                            <h6 class="font-weight-medium">{{ vatAmount|format_currency('PLN', locale='pl') }}</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium" id="shippingPrice">{{ shippingPrice|format_currency('PLN', locale='pl') }}</h6>
+                            <h6 class="font-weight-medium">{{ shippingPrice|format_currency('PLN', locale='pl') }}</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold" id="totalPrice">{{ totalPrice|format_currency('PLN', locale='pl') }}</h5>
+                            <h5 class="font-weight-bold">{{ totalPrice|format_currency('PLN', locale='pl') }}</h5>
                         </div>
+                        <a href = "{{ path('product') }}">
+                            <button class="btn btn-outline-dark mt-auto" href=" {{ path('product') }}">Go to main page</button>
+                        </a>
                     </div>
-                </div>
-                <div class="card border-secondary mb-5">
-                    <div class="card-header bg-dark text-white border-0">
-                        <h4 class="font-weight-semi-bold m-0">Shipping</h4>
-                    </div>
-                    <div class="card-body shipment-list">
-                        {% for shipping in shipping %}
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="Shipping" id="{{ shipping.getId() }}" {% if cart.getShipment().getId() == shipping.getId() %} checked {% endif %}>
-                                <label class="custom-control-label" for="paypal"> {{ shipping.getName() }} </label>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="card border-secondary mb-5">
-                    <div class="card-header bg-dark text-white border-0">
-                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ path('order_created') }}">
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                    <label class="custom-control-label" for="paypal">Paypal</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                                    <label class="custom-control-label" for="directcheck">PayU</label>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                                    <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer border-secondary bg-transparent">
-                            <button class="btn btn-outline-dark font-weight-bold my-3 py-3" type="submit">Place Order</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

@@ -19,10 +19,10 @@ class CartItem
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'cartItems', cascade:["persist"])]
-    #[ORM\JoinColumn(referencedColumnName: 'cart_id', nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'cart_id', nullable: true)]
     private ?Cart $cart = null;
 
-    #[ORM\OneToOne(targetEntity: Product::class, inversedBy: 'cartItem')]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItem', cascade:["persist"])]
     #[ORM\JoinColumn(referencedColumnName: 'product_id', name: 'product_id', nullable: false)]
     private ?Product $product;
 

@@ -6,6 +6,7 @@ use App\Entity\CartItem;
 use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Product;
+use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,7 +41,6 @@ class CartItemRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('i')
             ->select('i','c','p')
-            // ->addSelect('(i.quantity)*(p.price) as totalPrice')
             ->leftJoin('i.cart', 'c')
             ->leftJoin('i.product', 'p')
             ->andWhere('c.user = :user')
@@ -52,9 +52,31 @@ class CartItemRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getOrderItems(Order $order)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i','o','p')
+            ->leftJoin('i.orderRef', 'o')
+            ->leftJoin('i.product', 'p')
+            ->andWhere('i.orderRef = :order')
+            //->andWhere('o.status = :status')
+            ->setParameter('order', $order)
+            //->setParameter('status', Order::STATUS_COMPLETED)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function remove(CartItem $cartItem): void
     {
          $this->getEntityManager()->remove($cartItem);
+         $this->getEntityManager()->flush();
+  
+    }
+
+    public function save(CartItem $cartItem): void
+    {
+         $this->getEntityManager()->persist($cartItem);
          $this->getEntityManager()->flush();
   
     }

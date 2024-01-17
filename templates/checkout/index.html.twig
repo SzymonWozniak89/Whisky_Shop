@@ -7,13 +7,13 @@
                 <div class="mb-4">
                     <h4 class="font-weight-semi-bold mb-4">Shipping Address</h4>
                 </div>
+                {% if address %}
                 <div class="mb-4">
                     <a href = "{{ path('address_show') }}">
                         <button class="btn btn-outline-dark mt-auto my-3 py-3" href=" {{ path('address_show') }}"> Change shipping address </button>
                     </a>
                 </div>
                 <div class="row px-sm-6">
-                {% for address in address %}
                     <div class="col-lg-4 col-md-4 col-sm-6 d-flex align-items-stretch">
                         <div class="card border-secondary mb-5" style="width: 18rem;">
                             <div class="card-header bg-dark text-white border-0">
@@ -31,8 +31,14 @@
                             </div>
                         </div>
                     </div>
-                {% endfor %}
                 </div>
+                {% else %}
+                <div class="mb-4">
+                    <a href = "{{ path('address_add') }}">
+                        <button class="btn btn-outline-dark mt-auto my-3 py-3" href=" {{ path('address_add') }}"> Add shipping address </button>
+                    </a>
+                </div>
+                {% endif %}
             </div>       
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
@@ -72,31 +78,43 @@
                         {% for shipping in shipping %}
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="Shipping" id="{{ shipping.getId() }}" {% if cart.getShipment().getId() == shipping.getId() %} checked {% endif %}>
+                                {% if loop.first %}
+                                <input type="radio" class="custom-control-input" name="Shipping" id="{{ shipping.getId() }}" checked>
                                 <label class="custom-control-label" for="name"> {{ shipping.getName() }} </label>
+                                {% else %}
+                                <input type="radio" class="custom-control-input" name="Shipping" id="{{ shipping.getId() }}" {% if cart.getShipment() and cart.getShipment().getId() == shipping.getId() %} checked {% endif %}>
+                                <label class="custom-control-label" for="name"> {{ shipping.getName() }} </label>
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-                <div class="card border-secondary mb-5">
-                    <div class="card-header bg-dark text-white border-0">
-                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
-                    </div>
-                    <div class="card-body shipment-list">
-                        {% for payment in payment %}
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="Payment" id="{{ payment.getId() }}">
-                                <label class="custom-control-label" for="name"> {{ payment.getName() }} </label>
-                            </div>
+                <form action="{{ path('order_created') }}" method="POST">
+                    <div class="card border-secondary mb-5">
+                        <div class="card-header bg-dark text-white border-0">
+                            <h4 class="font-weight-semi-bold m-0">Payment</h4>
                         </div>
-                        {% endfor %}
+                        <div class="card-body">
+                            {% for payment in payment %}
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    {% if loop.first %}
+                                    <input type="radio" class="custom-control-input" name="Payment" value="{{ payment.getId() }}" checked>
+                                    <label class="custom-control-label" for="name"> {{ payment.getName() }} </label>
+                                    {% else %}
+                                    <input type="radio" class="custom-control-input" name="Payment" value="{{ payment.getId() }}">
+                                    <label class="custom-control-label" for="name"> {{ payment.getName() }} </label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer border-secondary bg-transparent">
+                            <button class="btn btn-outline-dark font-weight-bold my-3 py-3" type="submit" {% if address %} enabled {% else %} disabled {% endif %}>Place Order</button>
+                        </div>
                     </div>
-                    <div class="card-footer border-secondary bg-transparent">
-                        <button class="btn btn-outline-dark font-weight-bold my-3 py-3" type="submit">Place Order</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
