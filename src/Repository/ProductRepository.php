@@ -33,6 +33,16 @@ class ProductRepository extends ServiceEntityRepository
 
     public function get(int $prodId)
     {
+        // var_dump(
+        //     [$this->createQueryBuilder('p')
+        // ->where('p.id = :id')
+        // ->setParameter('id', $prodId)
+        // ->getQuery()->getSql(), $prodId, $this->createQueryBuilder('p')
+        // ->where('p.id = :id')
+        // ->setParameter('id', $prodId)
+        // ->getQuery()
+        // ->getOneOrNullResult()]);
+
         return $this->createQueryBuilder('p')
         ->where('p.id = :id')
         ->setParameter('id', $prodId)
@@ -63,6 +73,10 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('id', $product->getId())
             ->getQuery()
             ->execute();
+    }
+    public function save(Product $product){
+        $this->getEntityManager()->persist($product);
+        $this->getEntityManager()->flush();
     }
 
 }

@@ -29,13 +29,17 @@ class CartController extends AbstractController
 
     #[Route('/add/{prodId}', name: 'add', methods: ['GET'])]
     public function add(int $prodId, CartService $cartService, ShipmentService $shipmentService, CartCalculatorService $cartCalculatorService, Request $request): Response
-    {   
-        if ($request->isXmlHttpRequest()) {  
+    {
+        if ($request->isXmlHttpRequest()) {
+            
             if ($cartService->getProductStock($prodId) > 0){
+                var_dump($cartService->getProductStock($prodId));
                 $cartService->add($prodId);
-            } 
+                var_dump($cartService->getProductStock($prodId));die;
+            }
+            die;
             return new JsonResponse([
-                'quantity' => $cartService->getItemQuantity($prodId), 
+                'quantity' => $cartService->getItemQuantity($prodId),
                 'price' => $cartService->getItemTotalPrice($prodId),
                 'totalPrice' => $cartCalculatorService->getCartTotalPrice(),
                 'subtotalPrice' => $cartService->getSubtotalPrice(),
@@ -44,11 +48,10 @@ class CartController extends AbstractController
             ]);
 
         } else {
-            $cartService->add($prodId);  
-            $this->addFlash('success', 'Product added'); 
-            return $this->redirectToRoute('product');    
-        } 
-
+            $cartService->add($prodId);
+            $this->addFlash('success', 'Product added');
+            return $this->redirectToRoute('product');
+        }
     }
 
     #[Route('/sub/{prodId}', name: 'sub', methods: ['GET'])]
