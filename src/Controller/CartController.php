@@ -81,7 +81,7 @@ class CartController extends AbstractController
     #[Route('/CartIcon', name: 'CartIcon', methods: ['GET'])]
     public function CartIcon(CartService $cartService): Response
     {
-        return $this->render('partials/CartIcon.html.twig', [
+        return $this->render('partials/cartIcon.html.twig', [
             'numberOfProductsInCart' => $cartService->getNumberOfProductsInCart()
         ]); 
     }

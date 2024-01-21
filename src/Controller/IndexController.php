@@ -20,7 +20,7 @@ class IndexController extends AbstractController
     #[Route('/products/{page?1}', name: 'product', defaults: ['_format' => 'html'], methods: ['GET'])]
     public function productList(int $page, ProductService $productService): Response
     {
-        return $this->render('index/index.html.twig', [
+        return $this->render('products/index.html.twig', [
             'paginator' => $productService->getAllProducts($page),
         ]);
     }
