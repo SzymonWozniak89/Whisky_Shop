@@ -40,4 +40,10 @@ class ProductRepository extends ServiceEntityRepository
         ->getOneOrNullResult()
         ;
     }
+
+    public function save(Product $product){
+        $this->getEntityManager()->persist($product);
+        $this->getEntityManager()->flush();
+    }
+
 }

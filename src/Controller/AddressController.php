@@ -30,6 +30,7 @@ class AddressController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) 
         {
             $addressService->addNewAddress($address);
+            $addressService->setShippingAddress($address->getId());
             $this->addFlash('success', 'Address added');
             return $this->redirectToRoute('checkout_show');
         }

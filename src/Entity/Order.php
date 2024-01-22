@@ -37,7 +37,7 @@ class Order
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'address_id', nullable: false)]
@@ -45,6 +45,19 @@ class Order
 
     #[ORM\Column(length: 50, type: Types::DECIMAL, precision:5, scale:2)]
     private ?string $shipmentPrice = null;
+
+    #[ORM\OneToMany(mappedBy: 'orderRef', targetEntity: CartItem::class)]
+    private Collection $cartItems;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(referencedColumnName: 'payment_id', nullable: false)]
+    private ?Payment $payment = null;
+
+    public function __construct()
+    {
+        $this->cartItems = new ArrayCollection();
+        $this->user = new User;
+    }
 
     public function getId(): ?int
     {
@@ -99,12 +112,12 @@ class Order
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
@@ -131,6 +144,48 @@ class Order
     public function setShipmentPrice(string $shipmentPrice): static
     {
         $this->shipmentPrice = $shipmentPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): static
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setOrderRef($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): static
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getOrderRef() === $this) {
+                $cartItem->setOrderRef(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): static
+    {
+        $this->payment = $payment;
 
         return $this;
     }

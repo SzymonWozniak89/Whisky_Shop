@@ -53,7 +53,7 @@ class AddressRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('id', $user->getShippingAddress())
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
 }

@@ -8,13 +8,16 @@ use App\Repository\ProductRepository;
 use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\User;
+use App\Service\StockService;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Exception\ProductStockDepletedException;
 
 class CartService{
     public function __construct(
         public readonly CartRepository $cartRepository,
         public readonly ProductRepository $productRepository,
         public readonly CartItemRepository $cartItemRepository,
+        public readonly StockService $stockService,
         private readonly Security $security,
         )
     {
@@ -30,25 +33,45 @@ class CartService{
         {
             $cart = $this->cartRepository->new($user);
         }
+        try{
 
-        $product = $this->productRepository->get($prodId);
+            $product = $this->productRepository->get($prodId);
+            //$this->stockService->checkStockIsAvalible($product);
 
-        $cartItem = $this->cartItemRepository->findExistCartItem($product, $cart);
+            $cartItem = $this->cartItemRepository->findExistCartItem($product, $cart);
 
-        if ($cartItem == null) {
-            $cart->add($product);
-        } else {
-            $cartItemQuantity = $cartItem->getQuantity();
-            $cartItem->setQuantity($cartItemQuantity + 1);
+            if ($cartItem == null) {
+                $cart->add($product);
+            } else {
+                $cartItemQuantity = $cartItem->getQuantity();
+                $cartItem->setQuantity($cartItemQuantity + 1);
+            }
+        
+            $this->cartRepository->save($cart);
+            $this->stockService->decrease($product, 1);
+            return $cart;
+        } catch (ProductStockDepletedException $psd) {
+            //$this->addFlash('error', $psd->getMessage());
+
         }
-    
-        $this->cartRepository->save($cart);
-        return $cart;
+
     }
 
-    public function remove($cartItem)
+    public function subQuantity(int $prodId)
     {
-       return $this->cartItemRepository->remove($cartItem);
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $this->cartRepository->subQuantity($user, $prodId);
+        $product = $this->productRepository->get($prodId);
+        $this->stockService->increase($product, 1);
+    }
+
+    public function remove(CartItem $cartItem)
+    {
+        $cartItemQuantity = $cartItem->getQuantity();
+        $product = $this->productRepository->get($cartItem->getProduct()->getId());
+        $this->stockService->increase($product, $cartItemQuantity);
+        $this->cartItemRepository->remove($cartItem);
     }
 
     public function getNumberOfProductsInCart()
@@ -92,13 +115,6 @@ class CartService{
         /** @var User $user */
         $user = $this->security->getUser();
         return $this->cartRepository->getItemTotalPrice($user, $prodId);
-    }
-
-    public function subQuantity(int $prodId)
-    {
-        /** @var User $user */
-        $user = $this->security->getUser();
-        return $this->cartRepository->subQuantity($user, $prodId);
     }
 
     public function getProductStock($prodId)

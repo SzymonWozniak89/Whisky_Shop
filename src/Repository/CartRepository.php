@@ -45,6 +45,7 @@ class CartRepository extends ServiceEntityRepository
         $cart = new Cart();
         $cart->setUser($user);
         $cart->setStatus(Cart::STATUS_CREATED);
+        $cart->setShipment($this->getEntityManager()->getRepository(Shipment::class)->getCheapestShipping());
         $this->save($cart);
         return $cart;
     }

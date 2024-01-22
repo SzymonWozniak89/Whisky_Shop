@@ -150,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
-            $order->setUserId($this);
+            $order->setUser($this);
         }
 
         return $this;
@@ -160,8 +160,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
-            if ($order->getUserId() === $this) {
-                $order->setUserId(null);
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
             }
         }
 

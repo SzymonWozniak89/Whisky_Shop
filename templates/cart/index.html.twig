@@ -31,7 +31,7 @@
                                     </div>
                                     <input readonly type="text" class="form-control form-control-sm bg-dark text-center text-white" value=" {{ item.getQuantity() }} ">
                                     <div class="input-group-btn">
-                                        <button {% if item.getQuantity()==item.getProduct().getStock() %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" 
+                                        <button {% if item.getProduct().getStock() < 1 %}disabled{% endif %} data-prod_id="{{ item.getProduct().getId() }}" 
                                             class="btn btn-plus btn-outline-dark mt-auto"> + 
                                         </button>
                                     </div>
@@ -49,9 +49,6 @@
                     </tbody>
                 </table>
             </div>
-            {% else %}
-                <h3 class="display-9 fw-bolder">Your cart is empty</h3>
-            {% endif %}
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
                     <div class="card-header bg-dark border-0">
@@ -64,7 +61,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium" id="shippingPrice"> from {{ cheapestShipping|format_currency('PLN', locale='pl') }}</h6>
+                            <h6 class="font-weight-medium"> from <id="shippingPrice"> {{ cheapestShipping|format_currency('PLN', locale='pl') }}</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
@@ -78,6 +75,14 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="row px-xl-5 text-center">
+                <h2 class="display-9 fw-bolder mb-4">Your cart is empty!</h2>
+                <a href = "{{ path('product') }}">
+                    <button class="btn btn-outline-dark mb-5" href=" {{ path('product') }}">Go to Main Page</button>
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

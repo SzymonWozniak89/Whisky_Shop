@@ -36,9 +36,7 @@ class CartCalculatorService{
 
     public function getOrderTotalPrice()
     {
-        /** @var User $user */
-        $user = $this->security->getUser();
-        return $this->cartRepository->getOrderTotalPrice($user);
+        return $this->cartRepository->getOrderTotalPrice($this->user);
     }
 
 }

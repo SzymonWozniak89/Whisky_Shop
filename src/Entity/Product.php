@@ -51,8 +51,13 @@ class Product
     //#[ORM\JoinColumn(referencedColumnName: 'category_id', nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToOne(targetEntity: CartItem::class, mappedBy: 'product')]
-    private ?CartItem $cartItem;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class, cascade: ["persist"])]
+    private Collection $cartItem;
+
+    public function __construct()
+    {
+        $this->cartItem = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -71,7 +76,7 @@ class Product
         return $this;
     }
 
-    public function isHasActiveSale(): ?bool
+    public function hasActiveSale(): ?bool
     {
         return $this->hasActiveSale;
     }
@@ -187,6 +192,36 @@ class Product
     public function setCategory(Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, cartItem>
+     */
+    public function getCartItem(): Collection
+    {
+        return $this->cartItem;
+    }
+
+    public function addCartItem(cartItem $cartItem): static
+    {
+        if (!$this->cartItem->contains($cartItem)) {
+            $this->cartItem->add($cartItem);
+            $cartItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(cartItem $cartItem): static
+    {
+        if ($this->cartItem->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getProduct() === $this) {
+                $cartItem->setProduct(null);
+            }
+        }
 
         return $this;
     }
