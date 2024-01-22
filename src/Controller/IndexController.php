@@ -13,7 +13,7 @@ class IndexController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->redirectToRoute('product');
+        return $this->render('index/index.html.twig');
     }
 
 
