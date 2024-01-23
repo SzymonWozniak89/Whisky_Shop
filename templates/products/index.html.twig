@@ -7,8 +7,13 @@
                 {% for pr in paginator.results %}
                 <div class="col mb-5">
                     <div class="card border border-dark border-1 h-100">
+                        {% if pr.getImg %}
+                        <img class="card-img-top" src="http://cdn.swozniak.pl/img/{{ pr.getImg() }}" 
+                            alt="IMAGE NOT FOUND" />
+                        {% else %}
                         <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
-                            alt="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" />
+                            alt="IMAGE NOT FOUND" />
+                        {% endif %}
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <h3 class="fw-bolder"> {{ pr.getBrand().getName() }} </h3>
