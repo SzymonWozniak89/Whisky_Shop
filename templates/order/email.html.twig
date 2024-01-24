@@ -61,8 +61,8 @@
                     {% for item in orderItem %}
                     <tbody class="align-middle bg-white text-black">
                         <tr>
-                            <td class="align-justify-content-between"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTol61n1Nun3bdo2sBU7Efo6LBEp0TRYMay5A&usqp=CAU" 
-                                alt="" style="width: 100px;"></td>
+                            <td class="align-justify-content-between"><img src="https://cdn.swozniak.pl/img/{{ item.getProduct().getImg() }}" 
+                                alt="" style="width: 50px; height: 100px; object-fit: contain;"></td>
                             <td>{{ item.getProduct().getBrand().getName() }} {{ item.getProduct().getName() }} </td>
                             <td class="align-middle">{{ item.getProduct().getPrice()|format_currency('PLN', locale='pl') }}</td>
                             <td class="align-middle">{{ item.getQuantity() }}</td>
