@@ -9,14 +9,14 @@
               <h6> {{ weatherInfo.Time|date("d.m.Y H:m") }} </h6>
             </div>
             <div class="d-flex">
-              <div class="text-center">
-                <img src="https://developer.accuweather.com/sites/default/files/{{ weatherInfo.Icon }}-s.png" width="100px">
+              <div class="text-center pt-2">
+                <img src="https://developer.accuweather.com/sites/default/files/{{ weatherInfo.Icon }}-s.png" width="90px">
               </div>
               <div class="flex-grow-1 text-center">
                 <h3 class="display-4 mb-0 font-weight-bold text-center"> {{ weatherInfo.temp }} &#8451;</h3>
                 <span class="small"> {{ weatherInfo.WeatherText }} </span>
               </div>
-              <div class="justify-content-start" style="font-size: small;">
+              <div class="justify-content-start pt-1 p-1" style="font-size: small;">
                 <div><i class="bi bi-wind"></i> <span class="ms-1"> {{ weatherInfo.Wind }} km/h</span></div>
                 <div><i class="bi bi-moisture"></i> <span class="ms-1"> {{ weatherInfo.Humidity }} % </span></div>
                 <div><i class="bi bi-arrows-collapse"></i> <span class="ms-1"> {{ weatherInfo.Pressure }} hPa </span></div>
