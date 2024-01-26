@@ -4,19 +4,19 @@
             <a class="page-link text-black ms-1"
                href="{{ path(app.request.get('_route'), {page: paginator.previousPage}) }}"
                rel="previous">
-                <i class="fa fw fa-long-arrow-left"></i> previous
+                <i class="fa fw fa-long-arrow-left"></i> <
             </a>
         </li>
     {% else %}
         <li class="page-item disabled">
-            <span class="page-link"><i class="fa fw fa-arrow-left"></i> previous</span>
+            <span class="page-link"><i class="fa fw fa-arrow-left"></i> < </span>
         </li>
     {% endif %}
 
     {% for i in 1..paginator.lastPage %}
         {% if i == paginator.currentPage %}
             <li class="page-item active">
-                <span class="page-link bg-dark text-white ms-1 border-dark">{{ i }} <span class="sr-only">current</span></span>
+                <span class="page-link bg-dark text-white ms-1 border-dark">{{ i }} <span class="sr-only"></span></span>
             </li>
         {% else %}
             <li class="page-item"><a class="page-link text-black ms-1"
@@ -29,12 +29,12 @@
         <li class="page-item">
             <a class="page-link text-black ms-1"
                href="{{ path(app.request.get('_route'), {page: paginator.nextPage}) }}">
-                <span>next <i class="fa fw fa-long-arrow-right"></i></span>
+                <span> > <i class="fa fw fa-long-arrow-right"></i></span>
             </a>
         </li>
     {% else %}
         <li class="page-item disabled">
-            <span class="page-link">next <i class="fa fw fa-long-arrow-right"></i></span>
+            <span class="page-link"> > <i class="fa fw fa-long-arrow-right"></i></span>
         </li>
     {% endif %}
 </ul>

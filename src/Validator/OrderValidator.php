@@ -4,6 +4,7 @@ namespace App\Validator;
 
 use App\Entity\Order;
 use Exception;
+use function bccomp, bcadd;
 
 class OrderValidator{
 
@@ -11,7 +12,7 @@ class OrderValidator{
 
     public function validate(Order $order)
     {
-        if (($order->getAmount()) != ($order->getNetAmount()+$order->getVatAmount()))
+        if (bccomp($order->getAmount(), bcadd($order->getNetAmount(), $order->getVatAmount(),2),2) != 0 )
         {
             throw new Exception('NET + VAT != TotalPrice!');
         }
