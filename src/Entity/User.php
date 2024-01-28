@@ -8,8 +8,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(
+    fields: ["userName"],
+    errorPath: 'userName',
+    message: 'A user with this name already exists!',
+)]
+#[UniqueEntity(
+    fields: ["email"],
+    errorPath: 'email',
+    message: 'A user with this email already exists!',
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -17,10 +28,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'user_id')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'user_name', length: 100)]
+    #[ORM\Column(name: 'user_name', length: 100, unique: true)]
     private ?string $userName = null;
 
-    #[ORM\Column(name: 'user_email', length: 100)]
+    #[ORM\Column(name: 'user_email', length: 100, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(name: 'user_password', length: 255)]
@@ -55,12 +66,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getUserName(): ?string
     {
         return $this->userName;
     }
 
-    public function setName(string $userName): static
+    public function setUserName(string $userName): static
     {
         $this->userName = $userName;
 

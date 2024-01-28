@@ -47,7 +47,9 @@ class CartController extends AbstractController
         } else {
             $cartService->add($prodId);
             $this->addFlash('success', 'Product added');
-            return $this->redirectToRoute('product');
+
+            $route = $request->headers->get('referer');
+            return $this->redirect($route);
         }
     }
 
