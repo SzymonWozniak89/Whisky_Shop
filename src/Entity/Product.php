@@ -25,10 +25,10 @@ class Product
     #[ORM\Column(name: 'product_description', type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(name: 'product_base_price', type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column(name: 'product_base_price', type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $basePrice = null;
 
-    #[ORM\Column(name: 'product_price', type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column(name: 'product_price', type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $price = null;
 
     #[ORM\Column(name: 'product_img', length: 255, nullable: true)]

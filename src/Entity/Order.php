@@ -26,13 +26,13 @@ class Order
     #[ORM\Column(name: 'order_status', length: 30)]
     private ?string $status = null;
 
-    #[ORM\Column(name: 'order_amount',  type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column(name: 'order_amount',  type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $amount = null;
 
-    #[ORM\Column(name: 'order_net_amount', type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column(name: 'order_net_amount', type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $netAmount = null;
 
-    #[ORM\Column(name: 'order_vat_amount', type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column(name: 'order_vat_amount', type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $vatAmount = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
@@ -43,7 +43,7 @@ class Order
     #[ORM\JoinColumn(referencedColumnName: 'address_id', nullable: false)]
     private ?Address $address = null;
 
-    #[ORM\Column(length: 50, type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column(length: 50, type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $shipmentPrice = null;
 
     #[ORM\OneToMany(mappedBy: 'orderRef', targetEntity: CartItem::class)]

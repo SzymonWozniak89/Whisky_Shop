@@ -14,11 +14,11 @@
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                             {{ form_start(register) }}
                                 <div class="form-control bg-light border border-0">
-                                    {{ form_label(register.name) }}
-                                    {{ form_widget(register.name) }}
-                                    <small>{{ form_help(register.name) }}</small>
+                                    {{ form_label(register.userName) }}
+                                    {{ form_widget(register.userName) }}
+                                    <small>{{ form_help(register.userName) }}</small>
                                     <div class="form-error">
-                                        {{ form_errors(register.name) }}
+                                        {{ form_errors(register.userName) }}
                                     </div>
                                 </div> 
                                 </br>

@@ -31,7 +31,6 @@ class SignUpController extends AbstractController
 
             $user = $form->getData();
             $userRepository->saveUser($user);
-            //$emailService->registrationConfirmation($form->get('email')->getData());
 
             return $this->redirectToRoute('login');
         }

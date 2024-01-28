@@ -19,7 +19,7 @@ class Shipment
     #[ORM\Column(name: 'shipment_name', length: 50)]
     private ?string $name = null;
 
-    #[ORM\Column (name: 'shipment_price', type: Types::DECIMAL, precision:5, scale:2)]
+    #[ORM\Column (name: 'shipment_price', type: Types::DECIMAL, precision:8, scale:2)]
     private ?string $price = null;
 
     #[ORM\OneToMany(mappedBy: 'shipment', targetEntity: Cart::class, cascade:['persist'])]
